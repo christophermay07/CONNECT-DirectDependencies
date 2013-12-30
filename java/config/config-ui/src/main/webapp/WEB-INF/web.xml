@@ -34,13 +34,6 @@
 	</context-param>
 
 	<servlet-mapping>
-		<servlet-name>default</servlet-name>
-		<url-pattern>*.png</url-pattern>
-		<url-pattern>*.js</url-pattern>
-		<url-pattern>*.css</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
 		<servlet-name>config</servlet-name>
 		<url-pattern>/config/*</url-pattern>
 	</servlet-mapping>
