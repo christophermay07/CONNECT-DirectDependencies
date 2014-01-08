@@ -191,7 +191,7 @@
         <dependency>
             <groupId>org.nhind</groupId>
             <artifactId>config-store</artifactId>
-            <version>1.4</version>
+            <version>1.5-CONNECT-SNAPSHOT</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
