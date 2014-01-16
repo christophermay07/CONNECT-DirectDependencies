@@ -40,21 +40,21 @@ import javax.persistence.Table;
 @Table(name = "trustbundledomainreltn")
 public class TrustBundleDomainReltn 
 {
-	private long id;
-	
-	private Domain domain;
-	
-	private TrustBundle trustBundle;
-	
+    private long id;
+    
+    private Domain domain;
+    
+    private TrustBundle trustBundle;
+    
     private boolean incoming;
     
     private boolean outgoing;
-	
-	public TrustBundleDomainReltn()
-	{
-		
-	}
-	
+    
+    public TrustBundleDomainReltn()
+    {
+        
+    }
+    
     /**
      * Get the value of id.
      * 
@@ -62,7 +62,7 @@ public class TrustBundleDomainReltn
      */
     @Column(name = "id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -98,7 +98,7 @@ public class TrustBundleDomainReltn
     */
    public void setTrustBundle(TrustBundle bundle)
    {
-	   this.trustBundle = bundle;
+       this.trustBundle = bundle;
    }
    
    
@@ -121,7 +121,7 @@ public class TrustBundleDomainReltn
     */
    public void setDomain(Domain domain)
    {
-	   this.domain = domain;
+       this.domain = domain;
    }  
    
    /**

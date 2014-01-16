@@ -64,7 +64,7 @@ public class TrustBundleAnchor
      */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -149,7 +149,7 @@ public class TrustBundleAnchor
      */
     public void setData(byte[] data) throws CertificateException 
     {
-    	anchorData = data;
+        anchorData = data;
         if (data == Certificate.NULL_CERT) 
         {
             setThumbprint("");

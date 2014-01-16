@@ -51,9 +51,9 @@ import javax.persistence.TemporalType;
 @Table(name = "trustbundle")
 public class TrustBundle 
 {
-	private long id;
-	private String bundleName;
-	private String bundleURL;
+    private long id;
+    private String bundleName;
+    private String bundleURL;
     private byte[] signingCertificateData;
     private Collection<TrustBundleAnchor> trustBundleAnchors;
     private int refreshInterval;
@@ -65,8 +65,8 @@ public class TrustBundle
     
     public TrustBundle()
     {
-    	refreshInterval = 0;
-    	checkSum = "";
+        refreshInterval = 0;
+        checkSum = "";
     }
     
     /**
@@ -76,7 +76,7 @@ public class TrustBundle
      */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -102,7 +102,7 @@ public class TrustBundle
     @Column(name = "bundleName", unique = true, nullable = false)
     public String getBundleName()
     {
-    	return bundleName;
+        return bundleName;
     }
     
     /**
@@ -113,7 +113,7 @@ public class TrustBundle
      */
     public void setBundleName(String bundleName)
     {
-    	this.bundleName = bundleName;
+        this.bundleName = bundleName;
     }
     
     /**
@@ -124,7 +124,7 @@ public class TrustBundle
     @Column(name = "bundleURL", nullable = false)
     public String getBundleURL()
     {
-    	return bundleURL;
+        return bundleURL;
     }
     
     /**
@@ -135,7 +135,7 @@ public class TrustBundle
      */    
     public void setBundleURL(String bundleURL)
     {
-    	this.bundleURL = bundleURL;
+        this.bundleURL = bundleURL;
     }    
     
     /**
@@ -159,7 +159,7 @@ public class TrustBundle
      */  
     public void setSigningCertificateData(byte[] signingCertificateData) throws CertificateException 
     {
-    	this.signingCertificateData = signingCertificateData;
+        this.signingCertificateData = signingCertificateData;
     }    
 
     /**
@@ -181,7 +181,7 @@ public class TrustBundle
      */  
     public void setRefreshInterval(int refreshInterval) 
     {
-    	this.refreshInterval = refreshInterval;
+        this.refreshInterval = refreshInterval;
     } 
     
     /**
@@ -276,7 +276,7 @@ public class TrustBundle
      */     
     public void setLastRefreshError(BundleRefreshError lastRefreshError) 
     {
-    	this.lastRefreshError = lastRefreshError;
+        this.lastRefreshError = lastRefreshError;
     } 
 
     /**
@@ -289,7 +289,7 @@ public class TrustBundle
     {
         if (trustBundleAnchors == null) 
         {
-        	trustBundleAnchors = new ArrayList<TrustBundleAnchor>();
+            trustBundleAnchors = new ArrayList<TrustBundleAnchor>();
         }
         return trustBundleAnchors;
     }
@@ -313,7 +313,7 @@ public class TrustBundle
     @Column(name = "getCheckSum", nullable = false)
     public String getCheckSum()
     {
-    	return checkSum;
+        return checkSum;
     }
    
     /**
@@ -324,7 +324,7 @@ public class TrustBundle
      */  
     public void setCheckSum(String checkSum)
     {
-    	this.checkSum = checkSum;
+        this.checkSum = checkSum;
     }
     
     /**

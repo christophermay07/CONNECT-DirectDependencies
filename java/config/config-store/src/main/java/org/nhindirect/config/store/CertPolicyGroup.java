@@ -20,17 +20,17 @@ import javax.persistence.TemporalType;
 @Table(name = "certpolicygroup")
 public class CertPolicyGroup 
 {
-	private long id;
-	private String policyGroupName;
-	private Collection<CertPolicyGroupReltn> policies;
-    private Calendar createTime;  	
-	
-	
-	public CertPolicyGroup()
-	{
-	}
-	
-	
+    private long id;
+    private String policyGroupName;
+    private Collection<CertPolicyGroupReltn> policies;
+    private Calendar createTime;      
+    
+    
+    public CertPolicyGroup()
+    {
+    }
+    
+    
     /**
      * Get the value of id.
      * 
@@ -38,7 +38,7 @@ public class CertPolicyGroup
      */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -73,7 +73,7 @@ public class CertPolicyGroup
      */
     public void setPolicyGroupName(String policyGroupName)
     {
-    	this.policyGroupName = policyGroupName;
+        this.policyGroupName = policyGroupName;
     }
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "certPolicyGroup")
@@ -82,14 +82,14 @@ public class CertPolicyGroup
 
         if (policies == null) 
         {
-        	policies = new ArrayList<CertPolicyGroupReltn>();
+            policies = new ArrayList<CertPolicyGroupReltn>();
         }
         return policies;
     } 
     
     public void setCertPolicyGroupReltn(Collection<CertPolicyGroupReltn> policies)
     {
-    	this.policies = policies;
+        this.policies = policies;
     }
     
     /**

@@ -44,11 +44,11 @@ import org.nhindirect.config.store.util.DNSRecordUtils;
 public class DNSRecord 
 {
     private long id;
-	private String name;
-	private int type;
-	private int dclass;
-	private long ttl;
-	private byte[] data;
+    private String name;
+    private int type;
+    private int dclass;
+    private long ttl;
+    private byte[] data;
     private Calendar createTime;
     
     /**
@@ -57,97 +57,97 @@ public class DNSRecord
      */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)	
-	public long getId() 
-	{
-		return id;
-	}
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    
+    public long getId() 
+    {
+        return id;
+    }
 
     /**
      * Sets the internal id of the record.
      * @param id  The internal id of the record.
      */
-	public void setId(long id) 
-	{
-		this.id = id;  
-	}
+    public void setId(long id) 
+    {
+        this.id = id;  
+    }
 
-	/**
-	 * Gets the name associated with this DNS entry.  The is generally the name that is used for lookup purposes.
-	 * @return The name associated with this DNS entry.
-	 */
+    /**
+     * Gets the name associated with this DNS entry.  The is generally the name that is used for lookup purposes.
+     * @return The name associated with this DNS entry.
+     */
     @Column(name = "name")
-	public String getName() 
-	{
-		return name;
-	}
+    public String getName() 
+    {
+        return name;
+    }
     
-	/**
-	 * Sets the name associated with this DNS entry. 
-	 * @param name The name associated with this DNS entry.
-	 */
-	public void setName(String name) 
-	{
-		this.name = name;
-	}
-	
-	/**
-	 * Gets the type of the DNS record such as A, SRV, CERT, MX, and SOA. 
-	 * @return The type of the DNS record.
-	 */
+    /**
+     * Sets the name associated with this DNS entry. 
+     * @param name The name associated with this DNS entry.
+     */
+    public void setName(String name) 
+    {
+        this.name = name;
+    }
+    
+    /**
+     * Gets the type of the DNS record such as A, SRV, CERT, MX, and SOA. 
+     * @return The type of the DNS record.
+     */
     @Column(name = "type")
-	public int getType() 
-	{
-		return type;
-	}
-	
-	/**
-	 * Gets the type of the DNS record such as A, SRV, CERT, MX, and SOA. 
-	 * @param type The type of the DNS record.
-	 */
-	public void setType(int type) 
-	{
-		this.type = type;
-	}
-	
-	/**
-	 * Gets the DNS record class such as IN, HS, and CH.
-	 * @return The DNS record class.
-	 */
+    public int getType() 
+    {
+        return type;
+    }
+    
+    /**
+     * Gets the type of the DNS record such as A, SRV, CERT, MX, and SOA. 
+     * @param type The type of the DNS record.
+     */
+    public void setType(int type) 
+    {
+        this.type = type;
+    }
+    
+    /**
+     * Gets the DNS record class such as IN, HS, and CH.
+     * @return The DNS record class.
+     */
     @Column(name = "dclass")
-	public int getDclass() 
-	{
-		return dclass;
-	}
-	
+    public int getDclass() 
+    {
+        return dclass;
+    }
+    
     /**
      * Sets the DNS record class.
      * @param dclass The DNS record class.
      */
-	public void setDclass(int dclass) 
-	{
-		this.dclass = dclass;
-	}
-	
-	/**
-	 * Gets the record time to live in seconds.  The ttl represents how long a record can cached before it is considered stale.
-	 * @return The record time to live in seconds.
-	 */
+    public void setDclass(int dclass) 
+    {
+        this.dclass = dclass;
+    }
+    
+    /**
+     * Gets the record time to live in seconds.  The ttl represents how long a record can cached before it is considered stale.
+     * @return The record time to live in seconds.
+     */
     @Column(name = "ttl")
-	public long getTtl() 
-	{
-		return ttl;
-	}
-	
+    public long getTtl() 
+    {
+        return ttl;
+    }
+    
     /**
      * Sets the record time to live in seconds.
      * @param ttl The record time to live in seconds.
      */
-	public void setTtl(long ttl) 
-	{
-		this.ttl = ttl;
-	}
-	
+    public void setTtl(long ttl) 
+    {
+        this.ttl = ttl;
+    }
+    
     /**
      * Gets the date/time the record was created.
      * 
@@ -156,9 +156,9 @@ public class DNSRecord
     @Temporal(TemporalType.TIMESTAMP)
     public Calendar getCreateTime() 
     {
-    	if (createTime == null)
-    		setCreateTime(Calendar.getInstance());
-    	
+        if (createTime == null)
+            setCreateTime(Calendar.getInstance());
+        
         return createTime;
     }
 
@@ -169,64 +169,64 @@ public class DNSRecord
      */
     public void setCreateTime(Calendar timestamp) 
     {
-    	createTime = timestamp;
-    }	
-	
+        createTime = timestamp;
+    }    
+    
     /**
      * Get the rdata of the record.  Rdata is generally the value of a DNS lookup such an IP address for an A lookup or an X509 certificate for a CERT lookup.
      * @return The Rdata of the record.
      */
     @Column(name = "data", length=8192)
-    @Lob	
-	public byte[] getData() 
-	{
-		return data;
-	}
-	
+    @Lob    
+    public byte[] getData() 
+    {
+        return data;
+    }
+    
     /**
      * Sets the rdata of the record.
      * @param data The rdata of the record.
      */
-	public void setData(byte[] data) 
-	{
-		this.data = data;
-	}
-	
-	/**
-	 * Converts a raw wire transfer format of a record to a DNS record.
-	 * @param data  The raw byte stream of a record in wire transfer format.
-	 * @return A DNSRecord converted from the wire format.
-	 * @throws IOException
-	 */
-	public static DNSRecord fromWire(byte[] data) throws IOException
-	{
-		return DNSRecordUtils.fromWire(data);
-	}
-	
-	/**
-	 * Converts a DNS record to a raw wire transfer format.
-	 * @param rec The DNSRecord to convert.
-	 * @return A byte array representation of the DNSRecord in raw wire transfer format.
-	 * @throws IOException
-	 */
-	public static byte[] toWire(DNSRecord rec) throws IOException
-	{
-		return DNSRecordUtils.toWire(rec);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @return
-	 */
-	@Override
-	public boolean equals(Object ob)
-	{
-		if (!(ob instanceof DNSRecord))
-			return false;
-		
-		DNSRecord rec = (DNSRecord)ob;
-		
-		return (rec.dclass == dclass && rec.type == type && 
-				rec.name.equals(rec.name) && Arrays.areEqual(rec.getData(), data));
-	}
+    public void setData(byte[] data) 
+    {
+        this.data = data;
+    }
+    
+    /**
+     * Converts a raw wire transfer format of a record to a DNS record.
+     * @param data  The raw byte stream of a record in wire transfer format.
+     * @return A DNSRecord converted from the wire format.
+     * @throws IOException
+     */
+    public static DNSRecord fromWire(byte[] data) throws IOException
+    {
+        return DNSRecordUtils.fromWire(data);
+    }
+    
+    /**
+     * Converts a DNS record to a raw wire transfer format.
+     * @param rec The DNSRecord to convert.
+     * @return A byte array representation of the DNSRecord in raw wire transfer format.
+     * @throws IOException
+     */
+    public static byte[] toWire(DNSRecord rec) throws IOException
+    {
+        return DNSRecordUtils.toWire(rec);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    @Override
+    public boolean equals(Object ob)
+    {
+        if (!(ob instanceof DNSRecord))
+            return false;
+        
+        DNSRecord rec = (DNSRecord)ob;
+        
+        return (rec.dclass == dclass && rec.type == type && 
+                rec.name.equals(rec.name) && Arrays.areEqual(rec.getData(), data));
+    }
 }

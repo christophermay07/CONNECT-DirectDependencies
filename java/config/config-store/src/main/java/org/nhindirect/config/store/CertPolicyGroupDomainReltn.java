@@ -14,17 +14,17 @@ import javax.persistence.Table;
 @Table(name = "certpolicygroupdomainreltn")
 public class CertPolicyGroupDomainReltn 
 {
-	private long id;
-	
-	private Domain domain;
-	
-	private CertPolicyGroup policyGroup;
-	
-	public CertPolicyGroupDomainReltn()
-	{
-		
-	}
-	
+    private long id;
+    
+    private Domain domain;
+    
+    private CertPolicyGroup policyGroup;
+    
+    public CertPolicyGroupDomainReltn()
+    {
+        
+    }
+    
     /**
      * Get the value of id.
      * 
@@ -32,7 +32,7 @@ public class CertPolicyGroupDomainReltn
      */
     @Column(name = "id", nullable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -68,7 +68,7 @@ public class CertPolicyGroupDomainReltn
     */
    public void setCertPolicyGroup(CertPolicyGroup policyGroup)
    {
-	   this.policyGroup = policyGroup;
+       this.policyGroup = policyGroup;
    }
    
    
@@ -91,7 +91,7 @@ public class CertPolicyGroupDomainReltn
     */
    public void setDomain(Domain domain)
    {
-	   this.domain = domain;
+       this.domain = domain;
    }  
    
 }

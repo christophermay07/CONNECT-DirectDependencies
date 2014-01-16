@@ -27,6 +27,10 @@
 		<servlet-name>CXFServlet</servlet-name>
 		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
+        <persistence-unit-ref>
+            <persistence-unit-ref-name>persistence/config-store</persistence-unit-ref-name>
+            <persistence-unit-name>config-store</persistence-unit-name>
+        </persistence-unit-ref>
 	</servlet>
 
 	<servlet-mapping>

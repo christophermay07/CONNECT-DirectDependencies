@@ -21,30 +21,22 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
 package org.nhindirect.config.store.dao.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.connectopensource.config.store.ejb.DomainService;
 import org.nhindirect.config.store.Address;
 import org.nhindirect.config.store.ConfigurationStoreException;
 import org.nhindirect.config.store.Domain;
 import org.nhindirect.config.store.EntityStatus;
 import org.nhindirect.config.store.dao.AddressDao;
 import org.nhindirect.config.store.dao.DomainDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Default Spring/JPA implemenation
@@ -54,9 +46,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class DomainDaoImpl implements DomainDao {
 
-    @PersistenceContext
     @Autowired
-    private EntityManager entityManager;
+    private DomainService domainService;
 
     @Autowired
     private AddressDao addressDao;
@@ -68,14 +59,9 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#count()
      */
-    @Transactional(readOnly = true)
+    
     public int count() {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
-        Long result = (Long) entityManager.createQuery("select count(d) from Domain d").getSingleResult();
-        if (log.isDebugEnabled())
-            log.debug("Exit: " + result.intValue());
-        return result.intValue();
+        return domainService.count();
     }
 
     /*
@@ -83,13 +69,13 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#add(org.nhindirect.config.store.Domain)
      */
-    @Transactional(readOnly = false)
+    
     public void add(Domain item) {
         if (log.isDebugEnabled())
             log.debug("Enter");
 
         if (item.getDomainName() == null || item.getDomainName().isEmpty())
-        	throw new ConfigurationStoreException("Domain name cannot be empty or null");
+            throw new ConfigurationStoreException("Domain name cannot be empty or null");
         
         // Save and clear Address information until the Domain is saved.
         // This is really something that JPA should be doing, but doesn't seem
@@ -109,8 +95,7 @@ public class DomainDaoImpl implements DomainDao {
             if (log.isDebugEnabled())
                 log.debug("Calling JPA to persist the Domain");
 
-            entityManager.persist(item);
-            entityManager.flush();
+            domainService.add(item);
 
             if (log.isDebugEnabled())
                 log.debug("Persisted the bare Domain");
@@ -144,7 +129,7 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#update(org.nhindirect.config.store.Domain)
      */
-    @Transactional(readOnly = false)
+    
     public void update(Domain item) {
         if (log.isDebugEnabled())
             log.debug("Enter");
@@ -193,7 +178,8 @@ public class DomainDaoImpl implements DomainDao {
             }
             if (log.isDebugEnabled())
                 log.debug("Calling JPA to perform update...");
-            entityManager.merge(item);
+            
+            domainService.update(item);
         }
 
         if (log.isDebugEnabled())
@@ -205,7 +191,7 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#save(org.nhindirect.config.store.Domain)
      */
-    @Transactional(readOnly = false)
+    
     public void save(Domain item) {
         update(item);
     }
@@ -215,7 +201,7 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#delete(java.lang.String)
      */
-    @Transactional(readOnly = false)
+    
     public void delete(String name) {
         if (log.isDebugEnabled())
             log.debug("Enter");
@@ -223,17 +209,13 @@ public class DomainDaoImpl implements DomainDao {
         // delete addresses first if they exist
         final Domain domain = getDomainByName(name);
         
-        if (domain != null)
-        {      
-        	disassociateTrustBundlesFromDomain(domain.getId());
-        	
-        	removePolicyGroupFromDomain(domain.getId());
-        	
-	        entityManager.remove(domain);
-        }
-        else 
-        {
-        	log.warn("No domain matching the name: " + name + " found.  Unable to delete.");
+        if (domain != null) {
+            disassociateTrustBundlesFromDomain(domain.getId());
+            removePolicyGroupFromDomain(domain.getId());
+            
+            delete(domain);
+        } else  {
+            log.warn("No domain matching the name: " + name + " found.  Unable to delete.");
         }
         
         if (log.isDebugEnabled())
@@ -245,27 +227,27 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#delete(java.lang.String)
      */
-    @Transactional(readOnly = false)
     public void delete(Long anId) {
         if (log.isDebugEnabled())
             log.debug("Enter");
         
         final Domain domain = getDomain(anId);
-        if (domain != null) 
-        {
-        	disassociateTrustBundlesFromDomain(domain.getId());
-        	
-        	removePolicyGroupFromDomain(domain.getId());
-        	
-        	entityManager.remove(domain);
-        }
-        else 
-        {
+        
+        if (domain != null)  {
+            disassociateTrustBundlesFromDomain(domain.getId());
+            removePolicyGroupFromDomain(domain.getId());
+            
+            delete(domain);
+        } else {
            log.warn("No domain matching the id: " + anId + " found.  Unable to delete.");
         }
         
         if (log.isDebugEnabled())
             log.debug("Exit");
+    }
+
+    public void delete(Domain domain) {
+        domainService.delete(domain);
     }
     
     /*
@@ -273,23 +255,9 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#getDomainByName(java.lang.String)
      */
-    @Transactional(readOnly = true)
+    
     public Domain getDomainByName(String name) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
-
-        Domain result = null;
-
-        if (name != null) {
-            Query select = entityManager.createQuery("SELECT DISTINCT d from Domain d WHERE UPPER(d.domainName) = ?1");
-            Query paramQuery = select.setParameter(1, name.toUpperCase(Locale.getDefault()));
-            if (paramQuery.getResultList().size() > 0)
-            	result = (Domain) paramQuery.getSingleResult();
-        }
-
-        if (log.isDebugEnabled())
-            log.debug("Exit");
-        return result;
+        return domainService.getDomainByName(name);
     }
 
     /*
@@ -300,52 +268,8 @@ public class DomainDaoImpl implements DomainDao {
      * Convert the list of names into a String to be used in an IN clause (i.e.
      * {"One", "Two", "Three"} --> ('One', 'Two', 'Three'))
      */
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
     public List<Domain> getDomains(List<String> names, EntityStatus status) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
-
-        List<Domain> result = null;
-        Query select = null;
-        if (names != null) {
-            StringBuffer nameList = new StringBuffer("(");
-            for (String aName : names) {
-                if (nameList.length() > 1) {
-                    nameList.append(", ");
-                }
-                nameList.append("'").append(aName.toUpperCase(Locale.getDefault())).append("'");
-            }
-            nameList.append(")");
-            String query = "SELECT d from Domain d WHERE UPPER(d.domainName) IN " + nameList.toString();
-
-            if (status != null) {
-                select = entityManager.createQuery(query + " AND d.status = ?1");
-                select.setParameter(1, status);
-            } else {
-                select = entityManager.createQuery(query);
-            }
-        } else {
-            if (status != null) {
-                select = entityManager.createQuery("SELECT d from Domain d WHERE d.status = ?1");
-                select.setParameter(1, status);
-            } else {
-                select = entityManager.createQuery("SELECT d from Domain d");
-            }
-
-        }
-        
-        @SuppressWarnings("rawtypes")
-		List rs = select.getResultList();
-        if ((rs.size() != 0) && (rs.get(0) instanceof Domain)) {
-            result = (List<Domain>) rs;
-        } else {
-            result = new ArrayList<Domain>();
-        }
-
-        if (log.isDebugEnabled())
-            log.debug("Exit");
-        return result;
+        return domainService.getDomains(names, status);
     }
 
     /*
@@ -353,56 +277,8 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#listDomains(java.lang.String, int)
      */
-    // TODO I'm not sure if this is doing the right thing. I suspect that the
-    // real intent is to do some kind of db paging
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
     public List<Domain> listDomains(String name, int count) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
-
-        List<Domain> result = null;
-        Query select = null;
-        if (name != null) {
-            select = entityManager.createQuery("SELECT d from Domain d WHERE UPPER(d.domainName) = ?1");
-            select.setParameter(1, name.toUpperCase(Locale.getDefault()));
-        } else {
-            select = entityManager.createQuery("SELECT d from Domain d");
-        }
-
-        // assuming that a count of zero really means no limit
-        if (count > 0) {
-            select.setMaxResults(count);
-        }
-
-        @SuppressWarnings("rawtypes")
-		List rs = select.getResultList();
-        if ((rs.size() != 0) && (rs.get(0) instanceof Domain)) {
-            result = (List<Domain>) rs;
-        }
-
-        if (log.isDebugEnabled())
-            log.debug("Exit");
-        return result;
-    }
-
-    /**
-     * Get the value of entityManager.
-     * 
-     * @return the value of entityManager.
-     */
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    /**
-     * Set the value of entityManager.
-     * 
-     * @param entityManager
-     *            The vale of entityManager.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
+        return domainService.listDomains(name, count);
     }
 
     /*
@@ -410,67 +286,17 @@ public class DomainDaoImpl implements DomainDao {
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#searchDomain(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
     public List<Domain> searchDomain(String name, EntityStatus status) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
-
-        List<Domain> result = null;
-        StringBuffer query = new StringBuffer("");
-        Query select = null;
-        if (name != null) {
-            String search = name.replace('*', '%').toUpperCase(Locale.getDefault());
-            search.replace('?', '_');
-            query.append("SELECT d from Domain d WHERE UPPER(d.domainName) LIKE ?1 ");
-            if (status != null) {
-                query.append("AND d.status = ?2");
-                select = entityManager.createQuery(query.toString());
-                select.setParameter(1, search);
-                select.setParameter(2, status);
-            } else {
-                select = entityManager.createQuery(query.toString());
-                select.setParameter(1, search);
-            }
-        } else {
-            if (status != null) {
-                query.append("SELECT d from Domain d WHERE d.status LIKE ?1");
-                select = entityManager.createQuery(query.toString());
-                select.setParameter(1, status);
-            } else {
-                select = entityManager.createQuery("SELECT d from Domain d");
-            }
-
-        }
-
-        result = (List<Domain>) select.getResultList();
-        if (result == null) {
-            result = new ArrayList<Domain>();
-        }
-
-        if (log.isDebugEnabled())
-            log.debug("Exit");
-        return result;
+        return domainService.searchDomain(name, status);
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see org.nhindirect.config.store.dao.DomainDao#getDomain(java.lang.Long)
      */
-    @Transactional(readOnly = true)    
     public Domain getDomain(Long id) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
-
-        Domain result = null;
-        if ((id != null) && (id.longValue() > 0)) {
-            result = entityManager.find(Domain.class, id);
-        }
-
-        if (log.isDebugEnabled())
-            log.debug("Exit");
-        return result;
+        return domainService.getDomain(id);
     }
 
     /**
@@ -481,20 +307,15 @@ public class DomainDaoImpl implements DomainDao {
         addressDao = aDao;
     }
 
-	protected void disassociateTrustBundlesFromDomain(long domainId) throws ConfigurationStoreException
-	{
-		final TrustBundleDaoImpl dao = new TrustBundleDaoImpl();
-		dao.setEntityManager(this.entityManager);
-		dao.setDomainDao(this);
-		dao.disassociateTrustBundlesFromDomain(domainId);
-	}
-	
-	protected void removePolicyGroupFromDomain(long domainId)
-	{
-		final CertPolicyDaoImpl dao = new CertPolicyDaoImpl();
-		dao.setEntityManager(this.entityManager);
-		dao.setDomainDao(this);
-		dao.disassociatePolicyGroupsFromDomain(domainId);
-	}
+    protected void disassociateTrustBundlesFromDomain(long domainId) throws ConfigurationStoreException {
+        final TrustBundleDaoImpl dao = new TrustBundleDaoImpl();
+        dao.setDomainDao(this);
+        dao.disassociateTrustBundlesFromDomain(domainId);
+    }
     
+    protected void removePolicyGroupFromDomain(long domainId) {
+        final CertPolicyDaoImpl dao = new CertPolicyDaoImpl();
+        dao.setDomainDao(this);
+        dao.disassociatePolicyGroupsFromDomain(domainId);
+    }
 }

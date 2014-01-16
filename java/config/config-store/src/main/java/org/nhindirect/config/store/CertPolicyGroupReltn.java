@@ -17,18 +17,18 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "certpolicygroupreltn")
 public class CertPolicyGroupReltn 
 {
-	private long id;
-	private CertPolicyGroup policyGroup;
-	private CertPolicy policy;
-	private CertPolicyUse policyUse;
-	private boolean incoming;
-	private boolean outgoing;
+    private long id;
+    private CertPolicyGroup policyGroup;
+    private CertPolicy policy;
+    private CertPolicyUse policyUse;
+    private boolean incoming;
+    private boolean outgoing;
 
-	public CertPolicyGroupReltn()
-	{
-		
-	}
-	
+    public CertPolicyGroupReltn()
+    {
+        
+    }
+    
     /**
      * Get the value of id.
      * 
@@ -36,7 +36,7 @@ public class CertPolicyGroupReltn
      */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -58,24 +58,24 @@ public class CertPolicyGroupReltn
     @XmlTransient 
     public  CertPolicyGroup getCertPolicyGroup()
     {
-    	return policyGroup;
+        return policyGroup;
     }
     
     public void setCertPolicyGroup( CertPolicyGroup policyGroup)
     {
-    	this.policyGroup = policyGroup;
+        this.policyGroup = policyGroup;
     }
     
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "certPolicyId")
     public CertPolicy getCertPolicy()
     {
-    	return policy;
+        return policy;
     }  
     
     public void setCertPolicy(CertPolicy policy)
     {
-    	this.policy = policy;
+        this.policy = policy;
     } 
     
     
@@ -84,12 +84,12 @@ public class CertPolicyGroupReltn
     @XmlAttribute
     public CertPolicyUse getPolicyUse()
     {
-    	return policyUse;
+        return policyUse;
     }
 
     public void setPolicyUse(CertPolicyUse policyUse)
     {
-    	this.policyUse = policyUse;
+        this.policyUse = policyUse;
     }
     
 

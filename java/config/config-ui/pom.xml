@@ -633,7 +633,6 @@
         </repository>
     </distributionManagement>
     <properties>
-        <spring.security.version>3.0.5.RELEASE</spring.security.version>
-        <netbeans.hint.deploy.server>Tomcat60</netbeans.hint.deploy.server>
+        <spring.security.version>3.0.7.RELEASE</spring.security.version>
     </properties>
 </project>

@@ -20,17 +20,17 @@ import org.nhindirect.policy.PolicyLexicon;
 @Table(name = "certpolicy")
 public class CertPolicy 
 {
-	private long id;
-	private String policyName;
-	private PolicyLexicon lexicon;
-	private byte[] policyData;
-    private Calendar createTime;  	
-	
-	public CertPolicy()
-	{
-		
-	}
-	
+    private long id;
+    private String policyName;
+    private PolicyLexicon lexicon;
+    private byte[] policyData;
+    private Calendar createTime;      
+    
+    public CertPolicy()
+    {
+        
+    }
+    
     /**
      * Get the value of id.
      * 
@@ -38,7 +38,7 @@ public class CertPolicy
      */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() 
     {
         return id;
@@ -60,12 +60,12 @@ public class CertPolicy
     @XmlAttribute
     public PolicyLexicon getLexicon()
     {
-    	return lexicon;
+        return lexicon;
     }
     
     public void setLexicon(PolicyLexicon lexicon)
     {
-    	this.lexicon = lexicon;
+        this.lexicon = lexicon;
     }
     
     /**
@@ -86,19 +86,19 @@ public class CertPolicy
      */
     public void setPolicyName(String policyName)
     {
-    	this.policyName = policyName;
+        this.policyName = policyName;
     }
     
     @Column(name = "data", nullable = false, length=204800)
     @Lob
     public byte[] getPolicyData()
     {
-    	return policyData;
+        return policyData;
     }
     
     public void setPolicyData(byte[] policyData)
     {
-    	this.policyData = policyData;
+        this.policyData = policyData;
     }
     
     /**
