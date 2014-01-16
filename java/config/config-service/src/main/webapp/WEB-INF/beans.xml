@@ -21,7 +21,16 @@
     <context:component-scan base-package="org.nhindirect.config" />
 
     <tx:annotation-driven transaction-manager="transactionManager" />
-    <tx:jta-transaction-manager/>
+    <tx:jta-transaction-manager />
+
+    <jee:jndi-lookup id="addressService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/AddressServiceImpl" />
+    <jee:jndi-lookup id="anchorService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/AnchorServiceImpl" />
+    <jee:jndi-lookup id="certificateService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/CertificateServiceImpl" />
+    <jee:jndi-lookup id="certPolicyService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/CertPolicyServiceImpl" />
+    <jee:jndi-lookup id="dnsService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/DNSServiceImpl" />
+    <jee:jndi-lookup id="domainService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/DomainServiceImpl" />
+    <jee:jndi-lookup id="settingService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/SettingServiceImpl" />
+    <jee:jndi-lookup id="trustBundleService" jndi-name="java:global/CONNECT-GF/CONNECTCommonWeb-4.3.0-SNAPSHOT/TrustBundleServiceImpl" />
 
     <jaxws:endpoint id="configurationService" address="/ConfigurationService" >
         <jaxws:implementor>
@@ -64,86 +73,22 @@
         <property name="dao" ref="certPolicyDao"/>
     </bean>
 
-    <!--  DAO's -->
     <bean id="domainDao" class="org.nhindirect.config.store.dao.impl.DomainDaoImpl"/>
     <bean id="addressDao" class="org.nhindirect.config.store.dao.impl.AddressDaoImpl"/>
     <bean id="anchorDao" class="org.nhindirect.config.store.dao.impl.AnchorDaoImpl" />
     <bean id="certificateDao" class="org.nhindirect.config.store.dao.impl.CertificateDaoImpl"/>
-    <bean id="settingDao" class="org.nhindirect.config.store.dao.impl.SettingDaoImpl"/>
-    <bean id="dnsDao" class="org.nhindirect.config.store.dao.impl.DNSDaoImpl"/>
-    <bean id="trustBundleDao" class="org.nhindirect.config.store.dao.impl.TrustBundleDaoImpl"/>
+    <bean id="settingDao" class="org.nhindirect.config.store.dao.impl.SettingDaoImpl"/> 
+    <bean id="dnsDao" class="org.nhindirect.config.store.dao.impl.DNSDaoImpl"/> 
+    <bean id="trustBundleDao" class="org.nhindirect.config.store.dao.impl.TrustBundleDaoImpl"/> 
     <bean id="certPolicyDao" class="org.nhindirect.config.store.dao.impl.CertPolicyDaoImpl"/>
 
-    <!-- Exception translation bean post processor -->
-    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-
-    <jee:jndi-lookup id="entityManagerFactory" jndi-name="persistence/config-store" />
-
-    <!-- MySQL JPA CONFIGURATION TEMPLATE -->
-<!--    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="false" />
-                <property name="generateDdl" value="true" />
-                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
-            </bean>
-        </property>
-        <property name="dataSource" ref="dataSource"/>
-        <property name="persistenceUnitName" value="config-store" />
-    </bean> -->
-    
-    <!-- Data Source -->
-<!--    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" destroy-method="close">
-        <property name="jndiName" value="jdbc/configdb_datasource" />
-        <property name="lookupOnStartup" value="false"/>
-        <property name="cache" value="true"/>
-        <property name="proxyInterface" value="javax.sql.DataSource"/>
-    </bean> -->
-    
-    <!-- Session Factory -->
-<!--    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.default_schema">configdb</prop>
-                <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.show_statistics">false</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-            </props>
-        </property>
-    </bean> -->
-<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="url" value="jdbc:mysql://localhost:3306/nhind"/>
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="username" value="nhincuser" />
-        <property name="password" value="nhincpass" />
-    </bean> -->
-    <!--  END MySQL JPA CONFIGURATION -->
-
-    <!-- EMBEDDED DERBY JPA CONFIGURATION FOR A WORKING OUT OF THE BOX CONFIGURATION WITH NO PREREQUISITES OF
-    SETTING UP AN EXTERNAL DATABASE.  REMOVE THIS SECTION AND REPLACE WITH REAL JPA CONFIGURATION (SEE
-    ABOVE SECTION) FOR PRODUCTION
-    <bean id="entityManagerFactory"
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="true" />
-                <property name="generateDdl" value="true" />
-                <property name="databasePlatform" value="org.hibernate.dialect.DerbyDialect" />
-            </bean>
-        </property>
-        <property name="dataSource" ref="dataSource"/>
-        <property name="persistenceUnitName" value="config-store" />
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+       <property name="persistenceUnitName" value="config-store" />
     </bean>
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-        destroy-method="close">
-        <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
-        <property name="url" value="jdbc:derby:nhindconfig;create=true" />
-        <property name="username" value="nhind" />
-        <property name="password" value="nhind" />
-    </bean> -->
 
-    <!--  END DERBY JPA CONFIGURATION -->
+    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" />
 
