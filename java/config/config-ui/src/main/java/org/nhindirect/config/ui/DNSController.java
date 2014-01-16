@@ -123,12 +123,12 @@ public class DNSController
     
     public DNSController()
     {
-        if (log.isDebugEnabled()) log.debug("ConfigurationController initialized");
+         log.debug("ConfigurationController initialized");
     }
     
     private Collection<DNSEntryForm> convertDNSRecords(Collection<DNSRecord> entries)
     {
-        if (log.isDebugEnabled()) log.debug("Enter");
+         log.debug("Enter");
         
         Collection<DNSEntryForm> forms = new ArrayList<DNSEntryForm>();
         if (entries != null)
@@ -140,7 +140,7 @@ public class DNSController
 	        }
         }
         
-        if (log.isDebugEnabled()) log.debug("Exit");
+         log.debug("Exit");
         return forms;
     }
     
@@ -154,7 +154,7 @@ public class DNSController
                                 @RequestParam(value="submitType") String actionPath
                                 ) 
     {
-        if (log.isDebugEnabled()) log.debug("Enter: " + actionPath);
+         log.debug("Enter: " + actionPath);
         
         ModelAndView mav = new ModelAndView();
         
@@ -226,7 +226,7 @@ public class DNSController
             model.addAttribute("certificatesResults", results);
         }
         
-        if (log.isDebugEnabled()) log.debug("Exit");
+         log.debug("Exit");
         return mav;
     }
     
@@ -240,7 +240,7 @@ public class DNSController
                                         ) 
     {
         
-        if (log.isDebugEnabled()) log.debug("Enter");
+         log.debug("Enter");
         
         ModelAndView mav = new ModelAndView("dns");
         model.addAttribute("dnsEntryForm", new DNSEntryForm());
@@ -270,7 +270,7 @@ public class DNSController
 			@ModelAttribute("MXdnsForm") DNSEntryForm MXdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (AdnsForm != null && !AdnsForm.getName().equalsIgnoreCase("")
@@ -331,7 +331,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -345,7 +345,7 @@ public class DNSController
 			@ModelAttribute("AdnsForm") DNSEntryForm AdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (AdnsForm != null && !AdnsForm.getName().equalsIgnoreCase("")
@@ -374,7 +374,7 @@ public class DNSController
 
 
 
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -387,7 +387,7 @@ public class DNSController
 			@ModelAttribute("NSdnsForm") DNSEntryForm NSdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// NS records
 		if (NSdnsForm != null && !NSdnsForm.getName().equalsIgnoreCase("")
@@ -410,7 +410,7 @@ public class DNSController
 
 
 
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -424,7 +424,7 @@ public class DNSController
 			@ModelAttribute("AAdnsForm") DNSEntryForm AAdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (AAdnsForm != null && !AAdnsForm.getName().equalsIgnoreCase("")
@@ -450,7 +450,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -463,7 +463,7 @@ public class DNSController
 			@ModelAttribute("MXdnsForm") DNSEntryForm MXdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (MXdnsForm != null && !MXdnsForm.getName().equalsIgnoreCase("")
@@ -490,7 +490,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -503,7 +503,7 @@ public class DNSController
 			@ModelAttribute("CdnsForm") DNSEntryForm CdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (CdnsForm != null && !CdnsForm.getName().equalsIgnoreCase("")
@@ -530,7 +530,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 		
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -544,7 +544,7 @@ public class DNSController
 			@ModelAttribute("SrvdnsForm") DNSEntryForm SrvdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (SrvdnsForm != null && !SrvdnsForm.getName().equalsIgnoreCase("")
@@ -576,7 +576,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 		mav.setViewName("dns");
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -589,7 +589,7 @@ public class DNSController
 			@ModelAttribute("CertdnsForm") DNSEntryForm CertdnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// CERT records
 		if (CertdnsForm != null && !CertdnsForm.getName().equalsIgnoreCase("")
@@ -625,10 +625,10 @@ public class DNSController
 				}
 
 			} catch (ConfigurationServiceException ed) {
-				if (log.isDebugEnabled())
+				
 					log.error(ed);
 			} catch (Exception e) {
-				if (log.isDebugEnabled())
+				
 					log.error(e.getMessage());
 				e.printStackTrace();
 			}
@@ -656,7 +656,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -670,7 +670,7 @@ public class DNSController
 			@ModelAttribute("SoadnsForm") DNSEntryForm SoadnsForm, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter");
 		// A records
 		if (SoadnsForm != null && !SoadnsForm.getName().equalsIgnoreCase("")
@@ -691,7 +691,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 		refreshModelFromService(model);
 		mav.setViewName("dns");
-		if (log.isDebugEnabled())
+		
 			log.debug("Exit");
 		return mav;
 	}
@@ -713,7 +713,7 @@ public class DNSController
 			HttpSession session, Model model,
 			@RequestParam(value = "submitType") String actionPath) {
     	
-		if (log.isDebugEnabled())
+		
 			log.debug("Enter domain/removesettings");
 		// A records
 		try {
@@ -921,7 +921,7 @@ public class DNSController
 		ModelAndView mav = new ModelAndView("dns");
 
 		if (AdnsForm.getRemove() != null) {
-			if (log.isDebugEnabled())
+			
 				log.debug("the list of checkboxes checked or not is: "
 						+ AdnsForm.getRemove().toString());
 		}
@@ -931,12 +931,12 @@ public class DNSController
 		 * actionPath.equalsIgnoreCase("delete") && simpleForm.getRemove() !=
 		 * null) { int cnt = simpleForm.getRemove().size(); try{
 		 * Collection<String> settingstoberemovedlist = simpleForm.getRemove();
-		 * if (log.isDebugEnabled())
+		 * 
 		 * log.debug(" Trying to remove settings from database");
 		 * configSvc.deleteSetting(settingstoberemovedlist); if
 		 * (log.isDebugEnabled())
 		 * log.debug(" SUCCESS Trying to remove settings"); } catch
-		 * (ConfigurationServiceException e) { if (log.isDebugEnabled())
+		 * (ConfigurationServiceException e) { 
 		 * log.error(e); } }
 		 */
 

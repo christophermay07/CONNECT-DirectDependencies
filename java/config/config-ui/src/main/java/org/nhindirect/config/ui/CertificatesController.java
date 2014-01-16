@@ -65,7 +65,7 @@ public class CertificatesController {
     }
 
     public CertificatesController(){
-		if (log.isDebugEnabled()) log.debug("ConfigurationController initialized");
+		 log.debug("ConfigurationController initialized");
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')") 
@@ -80,10 +80,10 @@ public class CertificatesController {
 
 		ModelAndView mav = new ModelAndView(); 
 		String strid = "";
-		if (log.isDebugEnabled()) log.debug("Enter domain/addcertificate");
+		 log.debug("Enter domain/addcertificate");
 		
 		if(actionPath.equalsIgnoreCase("cancel")){
-			if (log.isDebugEnabled()) log.debug("trying to cancel from saveupdate");
+			 log.debug("trying to cancel from saveupdate");
 			SearchDomainForm form2 = (SearchDomainForm) session
 					.getAttribute("searchDomainForm");
 			model.addAttribute(form2 != null ? form2 : new SearchDomainForm());
@@ -98,7 +98,7 @@ public class CertificatesController {
 			strid = ""+certificateForm.getId();
 			// insert the new address into the Domain list of Addresses
 			EntityStatus estatus = certificateForm.getStatus();
-			if (log.isDebugEnabled()) log.debug("beginning to evaluate filedata");		
+			 log.debug("beginning to evaluate filedata");		
 			try{
                             model.addAttribute("certerror", false);
 
@@ -128,7 +128,7 @@ public class CertificatesController {
 
                                             
 
-                                            if (log.isDebugEnabled())
+                                            
                                             {
                                                 log.debug("store the certificate into database");
                                             }
@@ -137,17 +137,17 @@ public class CertificatesController {
 
 
 				} else {
-					if (log.isDebugEnabled()) log.debug("DO NOT store the certificate into database BECAUSE THERE IS NO FILE");
+					 log.debug("DO NOT store the certificate into database BECAUSE THERE IS NO FILE");
 				}
 
                                 
 
 
 			} catch (ConfigurationServiceException ed) {
-				if (log.isDebugEnabled())
+				
 					log.error(ed);
 			} catch (Exception e) {
-				if (log.isDebugEnabled()) log.error(e);
+				 log.error(e);
 				e.printStackTrace();
 			}
 			// certificate form and result
@@ -189,14 +189,14 @@ public class CertificatesController {
 
 		ModelAndView mav = new ModelAndView(); 
 	
-		if (log.isDebugEnabled()) log.debug("Enter domain/removecertificates");
+		 log.debug("Enter domain/removecertificates");
 		if(simpleForm.getRemove() != null){
-			if (log.isDebugEnabled()) log.debug("the list of checkboxes checked or not is: "+simpleForm.getRemove().toString());
+			 log.debug("the list of checkboxes checked or not is: "+simpleForm.getRemove().toString());
 		}
 		
 		if (configSvc != null && simpleForm != null && actionPath != null && (actionPath.equalsIgnoreCase("deletecertificate") || actionPath.equalsIgnoreCase("Remove Selected")) && simpleForm.getRemove() != null) {
 			int cnt = simpleForm.getRemove().size();
-			if (log.isDebugEnabled()) log.debug("removing certificates");
+			 log.debug("removing certificates");
 			try{
 				// get list of certificates for this domain
 				Collection<Certificate> certs = configSvc.listCertificates(1, 1000, CertificateGetOptions.DEFAULT);
@@ -208,7 +208,7 @@ public class CertificatesController {
 						   Certificate t = (Certificate) iter.next();
 						   //rest of the code block removed
 				    	if(t.getId() == Long.parseLong(removeid)){
-					    	if (log.isDebugEnabled()){
+					    	{
 					    		log.debug(" ");
 					    		log.debug("domain address id: " + t.getId());
 					    		log.debug(" ");
@@ -220,11 +220,11 @@ public class CertificatesController {
 					}			
 				}
 				// with the collection of anchor ids now remove them from the anchorService
-				if (log.isDebugEnabled()) log.debug(" Trying to remove certificates from database");
+				 log.debug(" Trying to remove certificates from database");
 				configSvc.removeCertificates(certtoberemovedlist);
-	    		if (log.isDebugEnabled()) log.debug(" SUCCESS Trying to update certificates");
+	    		 log.debug(" SUCCESS Trying to update certificates");
 			} catch (ConfigurationServiceException e) {
-				if (log.isDebugEnabled())
+				
 					log.error(e);
 			}
 		}
@@ -254,7 +254,7 @@ public class CertificatesController {
 
 		model.addAttribute("simpleForm",simpleForm);
 		String strid = ""+simpleForm.getId();
-		if (log.isDebugEnabled()) log.debug(" the value of id of simpleform is: "+strid);
+		 log.debug(" the value of id of simpleform is: "+strid);
 		
 		return mav;
 	}		

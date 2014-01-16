@@ -21,14 +21,14 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     @Autowired
     private CertPolicyService certPolicyService;
 
-    protected DomainDao domainDao;    
-    
+    protected DomainDao domainDao;
+
     @Autowired
     public void setDomainDao(DomainDao domainDao)
     {
         this.domainDao = domainDao;
     }
-    
+
     @Override
     public Collection<CertPolicy> getPolicies() throws ConfigurationStoreException {
         return certPolicyService.getPolicies();
@@ -50,7 +50,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     }
 
     @Override
-    public void deletePolicies(long[] policyIds) throws ConfigurationStoreException {        
+    public void deletePolicies(long[] policyIds) throws ConfigurationStoreException {
     	certPolicyService.deletePolicies(policyIds);
     }
 
@@ -60,11 +60,11 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     public void removePolicyUseFromGroups(long policyId) throws ConfigurationStoreException {
     	certPolicyService.removePolicyUseFromGroups(policyId);
     }
-    
+
     @Override
     public void updatePolicyAttributes(long id, String policyName,
-            PolicyLexicon lexicon, byte[] policyData) throws ConfigurationStoreException {        
-    	
+            PolicyLexicon lexicon, byte[] policyData) throws ConfigurationStoreException {
+
     	certPolicyService.updatePolicyAttributes(id, policyName, lexicon, policyData);
     }
 
@@ -84,7 +84,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     }
 
     @Override
-    public void addPolicyGroup(CertPolicyGroup group) throws ConfigurationStoreException {        
+    public void addPolicyGroup(CertPolicyGroup group) throws ConfigurationStoreException {
     	certPolicyService.addPolicyGroup(group);
     }
 
@@ -99,7 +99,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     }
 
     @Override
-    public void addPolicyUseToGroup(long groupId, long policyId, 
+    public void addPolicyUseToGroup(long groupId, long policyId,
             CertPolicyUse policyUse, boolean incoming, boolean outgoing) throws ConfigurationStoreException {
     	certPolicyService.addPolicyUseToGroup(groupId, policyId, policyUse, incoming, outgoing);
     }
@@ -116,7 +116,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
         final Domain domain = domainDao.getDomain(domainId);
         if (domain == null)
             throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-        
+
         // make sure the policy group exists
         final CertPolicyGroup policyGroup = this.getPolicyGroupById(policyGroupId);
         if (policyGroup == null)
@@ -131,13 +131,13 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
         final Domain domain = domainDao.getDomain(domainId);
         if (domain == null)
             throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-        
+
         // make sure the policy group exists
         final CertPolicyGroup policyGroup = this.getPolicyGroupById(policyGroupId);
         if (policyGroup == null) {
             throw new ConfigurationStoreException("Policy group with id " + policyGroup + " does not exist");
         }
-        
+
         certPolicyService.disassociatePolicyGroupFromDomain(domain, policyGroup);
     }
 
@@ -147,7 +147,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
         final Domain domain = domainDao.getDomain(domainId);
         if (domain == null)
             throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-        
+
         certPolicyService.disassociatePolicyGroupsFromDomain(domain);
     }
 
@@ -160,7 +160,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     public Collection<CertPolicyGroupDomainReltn> getPolicyGroupDomainReltns() throws ConfigurationStoreException {
             return certPolicyService.getPolicyGroupDomainReltns();
     }
-    
+
     @Override
     public Collection<CertPolicyGroupDomainReltn> getPolicyGroupsByDomain(long domainId) throws ConfigurationStoreException {
         // make sure the domain exists
@@ -169,7 +169,7 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
         if (domain == null) {
             throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
         }
-        
+
         return certPolicyService.getPolicyGroupsByDomain(domain);
-    }    
+    }
 }

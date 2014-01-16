@@ -78,7 +78,7 @@ public class BundlesController {
     }
 
     public BundlesController() {
-	if (log.isDebugEnabled()) {
+	 {
             log.error("BundlesController initialized");
         }
     }
@@ -102,11 +102,11 @@ public class BundlesController {
         ModelAndView mav = new ModelAndView();        
 
         // Debug Statement
-        if (log.isDebugEnabled()) log.debug("Enter Add Trust Bundle");
+         log.debug("Enter Add Trust Bundle");
 
         if(actionPath.equalsIgnoreCase("cancel"))
         {
-                if (log.isDebugEnabled()) 
+                 
                 {
                         log.debug("trying to cancel from saveupdate");
                 }
@@ -129,7 +129,7 @@ public class BundlesController {
             
             Boolean formValidated = true;
 
-            if (log.isDebugEnabled()) 
+             
             {
                     log.debug("Beginning to process signing certificate file");		
             }
@@ -169,7 +169,7 @@ public class BundlesController {
                     }	
                 } 	                    
             } else {
-                if (log.isDebugEnabled()) log.debug("DO NOT store the bundle into database BECAUSE THERE IS NO FILE");
+                 log.debug("DO NOT store the bundle into database BECAUSE THERE IS NO FILE");
             }
             
             // Check for empty bundle name
@@ -221,13 +221,13 @@ public class BundlesController {
 
                     configSvc.addTrustBundle(trustBundle);                
 
-                    if (log.isDebugEnabled())
+                    
                     {
                         log.debug("Add Trust Bundle to Database");
                     }
 
                 } catch (Exception e) {
-                        if (log.isDebugEnabled()) log.error(e);
+                         log.error(e);
                         e.printStackTrace();
                 }
 
@@ -272,14 +272,14 @@ public class BundlesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/removebundle");
         }
         
         if(simpleForm.getBundlesSelected() != null)
         {
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Bundles marked for removal: "+simpleForm.getBundlesSelected().toString());
             }
@@ -293,7 +293,7 @@ public class BundlesController {
             int bundleCount = simpleForm.getBundlesSelected().size();
             long[] bundlesSelected = new long[bundleCount];
 
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Removing Bundles");
             }
@@ -353,7 +353,7 @@ public class BundlesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/refreshbundles");
         }
@@ -362,7 +362,7 @@ public class BundlesController {
         
         if(simpleForm.getBundlesSelected() != null)
         {
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Bundles marked for refresh: "+simpleForm.getBundlesSelected().toString());
             }
@@ -375,7 +375,7 @@ public class BundlesController {
             
             int bundleCount = simpleForm.getBundlesSelected().size();            
 
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Refreshing Bundles");
             }
@@ -431,7 +431,7 @@ public class BundlesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/assignBundles");
         }    
@@ -469,7 +469,7 @@ public class BundlesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/addMoreBundlesForm");
         }    
@@ -545,7 +545,7 @@ public class BundlesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/newBundles");
         }    

@@ -42,7 +42,7 @@ public class LoginController {
     private static final Log log = LogFactory.getLog(LoginController.class);
 
     public LoginController() {
-        if (log.isDebugEnabled()) {
+         {
             log.debug("LoginController instantiated");
         }
     }
@@ -62,7 +62,7 @@ public class LoginController {
     public ModelAndView login(@RequestHeader(value="X-Requested-With", required=false) String requestedWith,
     HttpSession session,
     Model model) {
-    if (log.isDebugEnabled()) log.debug("Enter");
+     log.debug("Enter");
 
     LoginForm form = (LoginForm) session.getAttribute("loginForm");
 
@@ -71,7 +71,7 @@ public class LoginController {
 
     ModelAndView mav = new ModelAndView();
     mav.setViewName("login");
-    if (log.isDebugEnabled()) log.debug("Exit");
+     log.debug("Exit");
     return mav;
     }
      */
@@ -89,7 +89,7 @@ public class LoginController {
     BindingResult result,
     HttpSession session,
     Model model) {
-    if (log.isDebugEnabled()) log.debug("Enter");
+     log.debug("Enter");
 
     ModelAndView mav = new ModelAndView();
     HashMap<String, String> msgs = new HashMap<String, String>();
@@ -97,21 +97,21 @@ public class LoginController {
     boolean ok = true;
 
     //TODO Implement a real authentication service invocation
-    if (log.isDebugEnabled()) log.debug("Userid: " + form.getUserid() + ", Password: " + form.getPassword());
+     log.debug("Userid: " + form.getUserid() + ", Password: " + form.getPassword());
     if (validator  != null) {
-    //	if (log.isDebugEnabled()) log.debug("Got a validator!");
+    //	 log.debug("Got a validator!");
     //	validator.validate(form, result);
     }
     else {
-    if (log.isDebugEnabled()) log.debug("No validator was injected.");
+     log.debug("No validator was injected.");
     }
 
     if (result.hasErrors()) {
-    if (log.isDebugEnabled()) log.debug("Either userid or password is null");
+     log.debug("Either userid or password is null");
     mav.setViewName("login");
     }
     else {
-    if (log.isDebugEnabled()) log.debug("Login successful!");
+     log.debug("Login successful!");
     form.setPassword("");
     session.setAttribute("loginForm", form);
     session.setAttribute("authComplete", new Boolean(true));
@@ -124,7 +124,7 @@ public class LoginController {
     mav.addObject("statusList", EntityStatus.getEntityStatusList());
     }
 
-    if (log.isDebugEnabled()) log.debug("Exit");
+     log.debug("Exit");
     return mav;
     }
      */

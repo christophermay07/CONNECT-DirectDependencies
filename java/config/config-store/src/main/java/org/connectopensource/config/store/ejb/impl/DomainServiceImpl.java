@@ -25,16 +25,16 @@ public class DomainServiceImpl implements DomainService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#count()
      */
-    
     public int count() {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
+        log.debug("Enter");
+
         Long result = (Long) entityManager.createQuery("select count(d) from Domain d").getSingleResult();
-        if (log.isDebugEnabled())
-            log.debug("Exit: " + result.intValue());
+
+        log.debug("Exit: " + result.intValue());
+        
         return result.intValue();
     }
 
@@ -52,53 +52,56 @@ public class DomainServiceImpl implements DomainService {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomainByName(java.lang.String)
      */
-    
     public Domain getDomainByName(String name) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
+        log.debug("Enter");
 
         Domain result = null;
 
         if (name != null) {
             Query select = entityManager.createQuery("SELECT DISTINCT d from Domain d WHERE UPPER(d.domainName) = ?1");
             Query paramQuery = select.setParameter(1, name.toUpperCase(Locale.getDefault()));
-            if (paramQuery.getResultList().size() > 0)
+            
+            if (paramQuery.getResultList().size() > 0) {
                 result = (Domain) paramQuery.getSingleResult();
+            }
         }
 
-        if (log.isDebugEnabled())
-            log.debug("Exit");
+        log.debug("Exit");
+
         return result;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomains(java.lang.String, org.nhindirect.config.store.EntityStatus)
-     * 
+     *
      * Convert the list of names into a String to be used in an IN clause (i.e.
      * {"One", "Two", "Three"} --> ('One', 'Two', 'Three'))
      */
     @SuppressWarnings("unchecked")
-    
     public List<Domain> getDomains(List<String> names, EntityStatus status) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
+        log.debug("Enter");
 
         List<Domain> result = null;
         Query select = null;
+
         if (names != null) {
             StringBuffer nameList = new StringBuffer("(");
+        
             for (String aName : names) {
                 if (nameList.length() > 1) {
                     nameList.append(", ");
                 }
+            
                 nameList.append("'").append(aName.toUpperCase(Locale.getDefault())).append("'");
             }
+            
             nameList.append(")");
+            
             String query = "SELECT d from Domain d WHERE UPPER(d.domainName) IN " + nameList.toString();
 
             if (status != null) {
@@ -114,37 +117,36 @@ public class DomainServiceImpl implements DomainService {
             } else {
                 select = entityManager.createQuery("SELECT d from Domain d");
             }
-
         }
-        
+
         @SuppressWarnings("rawtypes")
         List rs = select.getResultList();
+        
         if ((rs.size() != 0) && (rs.get(0) instanceof Domain)) {
             result = (List<Domain>) rs;
         } else {
             result = new ArrayList<Domain>();
         }
 
-        if (log.isDebugEnabled())
-            log.debug("Exit");
+        log.debug("Exit");
+        
         return result;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#listDomains(java.lang.String, int)
      */
     // TODO I'm not sure if this is doing the right thing. I suspect that the
     // real intent is to do some kind of db paging
     @SuppressWarnings("unchecked")
-    
     public List<Domain> listDomains(String name, int count) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
+        log.debug("Enter");
 
         List<Domain> result = null;
         Query select = null;
+
         if (name != null) {
             select = entityManager.createQuery("SELECT d from Domain d WHERE UPPER(d.domainName) = ?1");
             select.setParameter(1, name.toUpperCase(Locale.getDefault()));
@@ -159,29 +161,29 @@ public class DomainServiceImpl implements DomainService {
 
         @SuppressWarnings("rawtypes")
         List rs = select.getResultList();
+        
         if ((rs.size() != 0) && (rs.get(0) instanceof Domain)) {
             result = (List<Domain>) rs;
         }
 
-        if (log.isDebugEnabled())
-            log.debug("Exit");
+        log.debug("Exit");
+        
         return result;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#searchDomain(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
     @SuppressWarnings("unchecked")
-    
     public List<Domain> searchDomain(String name, EntityStatus status) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
+        log.debug("Enter");
 
         List<Domain> result = null;
         StringBuffer query = new StringBuffer("");
         Query select = null;
+
         if (name != null) {
             String search = name.replace('*', '%').toUpperCase(Locale.getDefault());
             search.replace('?', '_');
@@ -207,32 +209,33 @@ public class DomainServiceImpl implements DomainService {
         }
 
         result = (List<Domain>) select.getResultList();
+        
         if (result == null) {
             result = new ArrayList<Domain>();
         }
 
-        if (log.isDebugEnabled())
-            log.debug("Exit");
+        log.debug("Exit");
+        
         return result;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomain(java.lang.Long)
      */
-        
     public Domain getDomain(Long id) {
-        if (log.isDebugEnabled())
-            log.debug("Enter");
+
+        log.debug("Enter");
 
         Domain result = null;
+        
         if ((id != null) && (id.longValue() > 0)) {
             result = entityManager.find(Domain.class, id);
         }
 
-        if (log.isDebugEnabled())
-            log.debug("Exit");
+        log.debug("Exit");
+        
         return result;
     }
 }

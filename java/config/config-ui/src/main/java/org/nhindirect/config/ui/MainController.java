@@ -128,7 +128,7 @@ public class MainController {
 	*/
 	
 	public MainController() {
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("MainController initialized");
             }
@@ -149,7 +149,7 @@ public class MainController {
         {
             log.error("Hit Search Controller");
             
-            if (log.isDebugEnabled()) {
+             {
                 log.debug("Enter search");
             }                
 
@@ -164,7 +164,7 @@ public class MainController {
                  * 
                  *************************************/ 
 
-                if (log.isDebugEnabled()) 
+                 
                 {
                     log.debug("trying to go to the settings page");
                 }
@@ -209,7 +209,7 @@ public class MainController {
                  * 
                  *************************************/                     
 
-                if (log.isDebugEnabled()) {
+                 {
                     log.debug("trying to go to the certificates page");
                 }
                     String action = "Update";
@@ -246,7 +246,7 @@ public class MainController {
                  * 
                  *************************************/ 
 
-                if (log.isDebugEnabled()) {
+                 {
                     log.debug("trying to go to the new domain page");
                 }
                     HashMap<String, String> msgs = new HashMap<String, String>();
@@ -284,7 +284,7 @@ public class MainController {
                  * 
                  *************************************/ 
 
-                if (log.isDebugEnabled()) 
+                 
                 {
                     log.debug("Entering DNS Management page");
                 }
@@ -337,7 +337,7 @@ public class MainController {
             
             else if (actionPath.equalsIgnoreCase("ManagePolicies") || actionPath.equalsIgnoreCase("Policies"))
             {
-                if (log.isDebugEnabled())  {
+                  {
                     log.debug("trying to go to the Policies page");
                 }
 
@@ -445,7 +445,7 @@ public class MainController {
             
             else if (actionPath.equalsIgnoreCase("ManageTrustBundles") || actionPath.equalsIgnoreCase("Bundles"))
             {
-                if (log.isDebugEnabled())  {
+                  {
                     log.debug("trying to go to the Bundles page");
                 }
 
@@ -573,7 +573,7 @@ public class MainController {
                 mav.addObject("searchResults", results);
             }
 
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Exit");
             }
@@ -599,7 +599,7 @@ public class MainController {
 	 * @return
 	 */
 	private String buildResponse(List<Domain> domains) {
-		if (log.isDebugEnabled()) log.debug("Enter");
+		 log.debug("Enter");
 		
 		StringBuffer result = new StringBuffer("{  \"Echo\":");
 		result.append(domains.size())
@@ -624,7 +624,7 @@ public class MainController {
 		}
 		result.append("] }");
 		
-		if (log.isDebugEnabled()) log.debug("Exit: " + result.toString());
+		 log.debug("Exit: " + result.toString());
 		return result.toString();
 	}
 
@@ -645,7 +645,7 @@ public class MainController {
                                 HttpSession session, 
                                 @ModelAttribute SimpleForm simpleForm,
                                 Model model) { 		
-		if (log.isDebugEnabled()) log.debug("Enter");
+		 log.debug("Enter");
 		
 		ModelAndView mav = new ModelAndView(); 
 		
@@ -710,7 +710,7 @@ public class MainController {
                 mav.addObject("statusList", EntityStatus.getEntityStatusList());
                 mav.addObject("searchResults", results);
 		
-		if (log.isDebugEnabled()) log.debug("Exit");
+		 log.debug("Exit");
 		return mav;
 	}
 	
@@ -727,7 +727,7 @@ public class MainController {
 	public ModelAndView newDomain (@RequestHeader(value="X-Requested-With", required=false) String requestedWith, 
 							        HttpSession session, 
 							        Model model) {
-		if (log.isDebugEnabled()) log.debug("Enter");
+		 log.debug("Enter");
 		ModelAndView mav = new ModelAndView(); 
 
 		mav.setViewName("domain"); 
@@ -735,13 +735,13 @@ public class MainController {
 		model.addAttribute("ajaxRequest", AjaxUtils.isAjaxRequest(requestedWith));
 		mav.addObject("statusList", EntityStatus.getEntityStatusList());
 		
-		if (log.isDebugEnabled()) log.debug("Exit");
+		 log.debug("Exit");
 		return mav;
 	}
 	
     private Collection<DNSEntryForm> convertDNSRecords(Collection<DNSRecord> entries)
     {
-        if (log.isDebugEnabled()) log.debug("Enter");
+         log.debug("Enter");
         
         Collection<DNSEntryForm> forms = new ArrayList<DNSEntryForm>();
         if (entries != null)
@@ -753,7 +753,7 @@ public class MainController {
             }
         }
        
-        if (log.isDebugEnabled()) log.debug("Exit");
+         log.debug("Exit");
         return forms;
     }
     

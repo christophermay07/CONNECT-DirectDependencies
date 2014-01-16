@@ -104,7 +104,7 @@ public class PoliciesController {
     }
 
     public PoliciesController() {
-	if (log.isDebugEnabled()) {
+	 {
             log.error("PoliciesController initialized");
         }
     }
@@ -128,11 +128,11 @@ public class PoliciesController {
         ModelAndView mav = new ModelAndView();        
 
         // Debug Statement
-        if (log.isDebugEnabled()) log.debug("Enter Add Policy");
+         log.debug("Enter Add Policy");
 
         if(actionPath.equalsIgnoreCase("cancel"))
         {
-                if (log.isDebugEnabled()) 
+                 
                 {
                         log.debug("trying to cancel from saveupdate");
                 }
@@ -155,7 +155,7 @@ public class PoliciesController {
             
             Boolean formValidated = true;
 
-            if (log.isDebugEnabled()) 
+             
             {
                     log.debug("Beginning to add new policy");		
             }
@@ -251,7 +251,7 @@ public class PoliciesController {
                     }	
                 } 	                    
             } else {
-                if (log.isDebugEnabled()) log.debug("DO NOT store the bundle into database BECAUSE THERE IS NO FILE");
+                 log.debug("DO NOT store the bundle into database BECAUSE THERE IS NO FILE");
             }
             
             // Check for empty bundle name
@@ -303,13 +303,13 @@ public class PoliciesController {
 
                     configSvc.addTrustBundle(trustBundle);                
 
-                    if (log.isDebugEnabled())
+                    
                     {
                         log.debug("Add Trust Bundle to Database");
                     }
 
                 } catch (Exception e) {
-                        if (log.isDebugEnabled()) log.error(e);
+                         log.error(e);
                         e.printStackTrace();
                 }
 
@@ -356,14 +356,14 @@ public class PoliciesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter remove policies method");
         }
         
         if(policyForm.getPoliciesSelected() != null)
         {
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Policies marked for removal: "+policyForm.getPoliciesSelected().toString());
             }
@@ -377,7 +377,7 @@ public class PoliciesController {
             int policyCount = policyForm.getPoliciesSelected().size();
             long[] policiesSelected = new long[policyCount];
 
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Removing Policies");
             }
@@ -417,7 +417,7 @@ public class PoliciesController {
         CertPolicy policy = null;
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter policies update form for policy #"+id);
         }
@@ -454,7 +454,7 @@ public class PoliciesController {
             
             int bundleCount = simpleForm.getBundlesSelected().size();            
 
-            if (log.isDebugEnabled()) 
+             
             {
                 log.debug("Refreshing Bundles");
             }
@@ -512,7 +512,7 @@ public class PoliciesController {
                                         Model model)  { 		
         String jsonResponse = null;
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter update policy #"+policyForm.getId());
         }    
@@ -606,7 +606,7 @@ public class PoliciesController {
         
 
         
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Checking uploaded lexicon file for format and validation");
         }                    
@@ -625,7 +625,7 @@ public class PoliciesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/assignBundles");
         }    
@@ -663,7 +663,7 @@ public class PoliciesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter bundles/addMoreBundlesForm");
         }    
@@ -739,7 +739,7 @@ public class PoliciesController {
 
         ModelAndView mav = new ModelAndView(); 
 
-        if (log.isDebugEnabled()) 
+         
         {
             log.debug("Enter policies");
         }    

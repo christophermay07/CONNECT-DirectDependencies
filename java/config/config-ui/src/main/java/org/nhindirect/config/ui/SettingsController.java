@@ -62,7 +62,7 @@ public class SettingsController {
 	}
 	
 	public SettingsController(){
-		if (log.isDebugEnabled()) log.debug("SettingsController initialized");
+		 log.debug("SettingsController initialized");
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')") 
@@ -79,10 +79,10 @@ public class SettingsController {
 		String strid = "";
 		String key = "";
 		String value = "";
-		if (log.isDebugEnabled()) log.debug("Enter domain/addsetting");
+		 log.debug("Enter domain/addsetting");
 		
 		if(actionPath.equalsIgnoreCase("cancel")){
-			if (log.isDebugEnabled()) log.debug("trying to cancel from saveupdate");
+			 log.debug("trying to cancel from saveupdate");
 			SearchDomainForm form2 = (SearchDomainForm) session
 					.getAttribute("searchDomainForm");
 			model.addAttribute(form2 != null ? form2 : new SearchDomainForm());
@@ -94,14 +94,14 @@ public class SettingsController {
 			return mav;
 		}
 		if(actionPath.equalsIgnoreCase("newsetting") || actionPath.equalsIgnoreCase("add setting")){
-			if (log.isDebugEnabled()) log.debug("trying to get/set settings");
+			 log.debug("trying to get/set settings");
 			strid = ""+settingsForm.getId();
 			key = ""+settingsForm.getKey();
 			value = ""+settingsForm.getValue();
 			try {
-				if (log.isDebugEnabled()) log.debug("trying set settings services");
+				 log.debug("trying set settings services");
 				configSvc.addSetting(key, value);
-				if (log.isDebugEnabled()) log.debug("PAST trying set settings services");
+				 log.debug("PAST trying set settings services");
 			} catch (ConfigurationServiceException e) {
 				e.printStackTrace();
 			}
@@ -138,9 +138,9 @@ public class SettingsController {
 
 		ModelAndView mav = new ModelAndView(); 
 	
-		if (log.isDebugEnabled()) log.debug("Enter domain/removesettings");
+		 log.debug("Enter domain/removesettings");
 		if(simpleForm.getRemove() != null){
-			if (log.isDebugEnabled()) log.debug("the list of checkboxes checked or not is: "+simpleForm.getRemove().toString());
+			 log.debug("the list of checkboxes checked or not is: "+simpleForm.getRemove().toString());
 		}
 		
 		String strid = ""+simpleForm.getId();
@@ -148,11 +148,11 @@ public class SettingsController {
 			int cnt = simpleForm.getRemove().size();
 			try{
 				Collection<String> settingstoberemovedlist = simpleForm.getRemove();
-				if (log.isDebugEnabled()) log.debug(" Trying to remove settings from database");
+				 log.debug(" Trying to remove settings from database");
 				configSvc.deleteSetting(settingstoberemovedlist);
-	    		if (log.isDebugEnabled()) log.debug(" SUCCESS Trying to remove settings");
+	    		 log.debug(" SUCCESS Trying to remove settings");
 			} catch (ConfigurationServiceException e) {
-				if (log.isDebugEnabled())
+				
 					log.error(e);
 			}
 		}

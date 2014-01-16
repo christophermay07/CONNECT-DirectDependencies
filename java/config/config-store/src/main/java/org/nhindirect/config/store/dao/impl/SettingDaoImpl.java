@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Implementing class for Setting DAO methods.
- * 
+ *
  * @author Greg Meyer
  */
 @Repository

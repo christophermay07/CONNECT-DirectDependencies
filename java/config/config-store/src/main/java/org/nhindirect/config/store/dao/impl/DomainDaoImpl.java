@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2010, NHIN Direct Project
 All rights reserved.
 
@@ -6,16 +6,16 @@ Redistribution and use in source and binary forms, with or without modification,
 
 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
-   in the documentation and/or other materials provided with the distribution.  
-3. Neither the name of the The NHIN Direct Project (nhindirect.org) nor the names of its contributors may be used to endorse or promote 
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
+   in the documentation and/or other materials provided with the distribution.
+3. Neither the name of the The NHIN Direct Project (nhindirect.org) nor the names of its contributors may be used to endorse or promote
    products derived from this software without specific prior written permission.
-   
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS 
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -40,7 +40,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Default Spring/JPA implemenation
- * 
+ *
  * @author ppyette
  */
 @Repository
@@ -51,32 +51,32 @@ public class DomainDaoImpl implements DomainDao {
 
     @Autowired
     private AddressDao addressDao;
-    
+
     private static final Log log = LogFactory.getLog(DomainDaoImpl.class);
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#count()
      */
-    
+
     public int count() {
         return domainService.count();
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#add(org.nhindirect.config.store.Domain)
      */
-    
+
     public void add(Domain item) {
-        if (log.isDebugEnabled())
+
             log.debug("Enter");
 
         if (item.getDomainName() == null || item.getDomainName().isEmpty())
             throw new ConfigurationStoreException("Domain name cannot be empty or null");
-        
+
         // Save and clear Address information until the Domain is saved.
         // This is really something that JPA should be doing, but doesn't seem
         // to work.
@@ -92,12 +92,12 @@ public class DomainDaoImpl implements DomainDao {
             item.setCreateTime(Calendar.getInstance());
             item.setUpdateTime(item.getCreateTime());
 
-            if (log.isDebugEnabled())
+
                 log.debug("Calling JPA to persist the Domain");
 
             domainService.add(item);
 
-            if (log.isDebugEnabled())
+
                 log.debug("Persisted the bare Domain");
 
             boolean needUpdate = false;
@@ -111,27 +111,27 @@ public class DomainDaoImpl implements DomainDao {
             }
 
             if (needUpdate) {
-                if (log.isDebugEnabled())
+
                     log.debug("Updating the domain with Address info");
                 update(item);
             }
 
-            if (log.isDebugEnabled())
+
                 log.debug("Returned from JPA: Domain ID=" + item.getId());
         }
 
-        if (log.isDebugEnabled())
+
             log.debug("Exit");
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#update(org.nhindirect.config.store.Domain)
      */
-    
+
     public void update(Domain item) {
-        if (log.isDebugEnabled())
+
             log.debug("Enter");
 
         if (item != null) {
@@ -148,7 +148,7 @@ public class DomainDaoImpl implements DomainDao {
                     }
                 }
                 if (!found) {
-                    if (log.isDebugEnabled())
+
                         log.debug("Adding new postmaster email address: " + item.getPostMasterEmail());
                     item.getAddresses().add(new Address(item, item.getPostMasterEmail(), "Postmaster"));
                 }
@@ -156,7 +156,7 @@ public class DomainDaoImpl implements DomainDao {
 
             for (Address address : item.getAddresses()) {
                 if ((address.getId() == null) || (address.getId().longValue() == 0)) {
-                    if (log.isDebugEnabled())
+
                         log.debug("Adding " + address.toString() + " to database");
                     addressDao.add(address);
                 }
@@ -169,102 +169,102 @@ public class DomainDaoImpl implements DomainDao {
                 while (addrs.hasNext()) {
                     Address address = addrs.next();
                     if (address.getDisplayName().equals("Postmaster")) {
-                        if (log.isDebugEnabled())
+
                             log.debug("Linking domain's postmaster email address to " + address.toString());
                         item.setPostmasterAddressId(address.getId());
                         break;
                     }
                 }
             }
-            if (log.isDebugEnabled())
+
                 log.debug("Calling JPA to perform update...");
-            
+
             domainService.update(item);
         }
 
-        if (log.isDebugEnabled())
+
             log.debug("Exit");
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#save(org.nhindirect.config.store.Domain)
      */
-    
+
     public void save(Domain item) {
         update(item);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#delete(java.lang.String)
      */
-    
+
     public void delete(String name) {
-        if (log.isDebugEnabled())
+
             log.debug("Enter");
 
         // delete addresses first if they exist
         final Domain domain = getDomainByName(name);
-        
+
         if (domain != null) {
             disassociateTrustBundlesFromDomain(domain.getId());
             removePolicyGroupFromDomain(domain.getId());
-            
+
             delete(domain);
         } else  {
             log.warn("No domain matching the name: " + name + " found.  Unable to delete.");
         }
-        
-        if (log.isDebugEnabled())
+
+
             log.debug("Exit");
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#delete(java.lang.String)
      */
     public void delete(Long anId) {
-        if (log.isDebugEnabled())
+
             log.debug("Enter");
-        
+
         final Domain domain = getDomain(anId);
-        
+
         if (domain != null)  {
             disassociateTrustBundlesFromDomain(domain.getId());
             removePolicyGroupFromDomain(domain.getId());
-            
+
             delete(domain);
         } else {
            log.warn("No domain matching the id: " + anId + " found.  Unable to delete.");
         }
-        
-        if (log.isDebugEnabled())
+
+
             log.debug("Exit");
     }
 
     public void delete(Domain domain) {
         domainService.delete(domain);
     }
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomainByName(java.lang.String)
      */
-    
+
     public Domain getDomainByName(String name) {
         return domainService.getDomainByName(name);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomains(java.lang.String, org.nhindirect.config.store.EntityStatus)
-     * 
+     *
      * Convert the list of names into a String to be used in an IN clause (i.e.
      * {"One", "Two", "Three"} --> ('One', 'Two', 'Three'))
      */
@@ -274,7 +274,7 @@ public class DomainDaoImpl implements DomainDao {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#listDomains(java.lang.String, int)
      */
     public List<Domain> listDomains(String name, int count) {
@@ -283,7 +283,7 @@ public class DomainDaoImpl implements DomainDao {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#searchDomain(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
     public List<Domain> searchDomain(String name, EntityStatus status) {
@@ -292,7 +292,7 @@ public class DomainDaoImpl implements DomainDao {
 
     /**
      * (non-Javadoc)
-     * 
+     *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomain(java.lang.Long)
      */
     public Domain getDomain(Long id) {
@@ -312,7 +312,7 @@ public class DomainDaoImpl implements DomainDao {
         dao.setDomainDao(this);
         dao.disassociateTrustBundlesFromDomain(domainId);
     }
-    
+
     protected void removePolicyGroupFromDomain(long domainId) {
         final CertPolicyDaoImpl dao = new CertPolicyDaoImpl();
         dao.setDomainDao(this);

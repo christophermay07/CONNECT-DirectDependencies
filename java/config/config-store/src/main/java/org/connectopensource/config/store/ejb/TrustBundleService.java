@@ -1,21 +1,21 @@
-/* 
+/*
 Copyright (c) 2010, NHIN Direct Project
 All rights reserved.
 
 Authors:
    Greg Meyer      gm2552@cerner.com
- 
+
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
 Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer 
-in the documentation and/or other materials provided with the distribution.  Neither the name of the The NHIN Direct Project (nhindirect.org). 
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the distribution.  Neither the name of the The NHIN Direct Project (nhindirect.org).
 nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS 
-BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
-STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 */
 
@@ -37,22 +37,21 @@ import org.nhindirect.config.store.TrustBundleDomainReltn;
  * @author Greg Meyer
  * @since 1.2
  */
-public interface TrustBundleService 
-{
+public interface TrustBundleService {
     /**
      * Gets a collection of all trust bundles in the system
      * @return Collection of all trust bundles in the system.  If no trust bundles have been configured, then an empty collection is returned.
      * @throws ConfigurationStoreException
      */
     public Collection<TrustBundle> getTrustBundles() throws ConfigurationStoreException;
-    
+
     /**
      * Gets a specific trust bundle by name.  Each trust bundle name is unique and case insensitive.
      * @param bundleName The bundle name.
      * @return The trust bundle specified by the name.  If a bundle with the given name is not found, then null is returned.
      * @throws ConfigurationStoreException
      */
-    public TrustBundle getTrustBundleByName(String bundleName) throws ConfigurationStoreException;    
+    public TrustBundle getTrustBundleByName(String bundleName) throws ConfigurationStoreException;
 
     /**
      * Gets a specific trust bundle by its internal id.
@@ -60,8 +59,8 @@ public interface TrustBundleService
      * @return The trust bundle specified by the id.  If a bundle with the given id is not found, then null is returned.
      * @throws ConfigurationStoreException
      */
-    public TrustBundle getTrustBundleById(long id) throws ConfigurationStoreException;        
-    
+    public TrustBundle getTrustBundleById(long id) throws ConfigurationStoreException;
+
     /**
      * Adds a trust bundle to the system.  The anchors should not be provided in the object as they will be downloaded.
      * from the provided trust bundle URL.
@@ -70,7 +69,7 @@ public interface TrustBundleService
      * are empty or null.
      */
     public void addTrustBundle(TrustBundle bundle) throws ConfigurationStoreException;
-    
+
     /**
      * Updates the trust anchors within a bundle.  The last refresh time and refresh error will be updated as well (the error will
      * set to {@link BundleRefreshError#SUCCESS}
@@ -82,7 +81,7 @@ public interface TrustBundleService
      */
     public void updateTrustBundleAnchors(long trustBundleId, Calendar attemptTime, Collection<TrustBundleAnchor> newAnchorSet,
             String bundleCheckSum) throws ConfigurationStoreException;
-    
+
     /**
      * Updates the last error that occurred when trying to download or refresh the bundle from its URL.
      * @param trustBundleId The id of the bundle.
@@ -91,14 +90,14 @@ public interface TrustBundleService
      * @throws ConfigurationStoreException
      */
     public void updateLastUpdateError(long trustBundleId, Calendar attemptTime, BundleRefreshError error) throws ConfigurationStoreException;
-    
+
     /**
      * Deletes a set of trust bundle from the system.  All associations to domains are deleted as well.
-     * @param trustBundleIds The ids of the bundles to delete. 
+     * @param trustBundleIds The ids of the bundles to delete.
      * @throws ConfigurationStoreException
      */
     public void deleteTrustBundles(long[] trustBundleIds) throws ConfigurationStoreException;
-    
+
     /**
      * Updates the signing certificate used to validate the authenticity of a bundle.
      * @param trustBundleId The trust bundle id.
@@ -106,7 +105,7 @@ public interface TrustBundleService
      * @throws ConfigurationStoreException
      */
     public void updateTrustBundleSigningCertificate(long trustBundleId, X509Certificate signingCert) throws ConfigurationStoreException;
-    
+
     /**
      * Updates multiple attributes of a trust bundle.
      * @param trustBundleId  The id of the bundle to update.
@@ -118,16 +117,19 @@ public interface TrustBundleService
      */
     public void updateTrustBundleAttributes(long trustBundleId, String bundleName, String bundleUrl, X509Certificate signingCert,
             int refreshInterval) throws ConfigurationStoreException;
-        
+
     /**
      * Dissociates a trust bundle from all domains.
      * @param trustBundleId The trust bundle id.
      * @throws ConfigurationStoreException
      */
     public void disassociateTrustBundleFromDomains(long trustBundleId) throws ConfigurationStoreException;
-    
+
     public void associateTrustBundleToDomain(TrustBundleDomainReltn reltn);
-    public void disassociateTrustBundleFromDomain(Domain domain);    
+
+    public void disassociateTrustBundleFromDomain(Domain domain);
+
     public void disassociateTrustBundleFromDomain(Domain domain, TrustBundle trustBundle);
+
     public Collection<TrustBundleDomainReltn> getTrustBundlesByDomain(Domain domain) throws ConfigurationStoreException;
 }
