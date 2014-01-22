@@ -21,12 +21,11 @@ import org.junit.Test;
 import org.nhindirect.config.store.dao.DomainDao;
 import org.nhindirect.config.store.dao.impl.CertPolicyDaoImpl;
 
-public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends CertPolicyDaoBaseTest
-{
+public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends CertPolicyDaoBaseTest {
     @Test
-    public void testDisassociatePolicyGroupFromDomain_associateDomainAndBundle_assertAssociationRemoved()
-    {
+    public void testDisassociatePolicyGroupFromDomain_associateDomainAndBundle_assertAssociationRemoved() {
         final Domain domain = new Domain();
+        
         domain.setDomainName("Test Domain");
         dmDao.add(domain);
         
@@ -34,7 +33,6 @@ public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends Cer
         group.setPolicyGroupName("Test Group");
         
         polDao.addPolicyGroup(group);
-        
         polDao.associatePolicyGroupToDomain(domain.getId(), group.getId());
         
         Collection<CertPolicyGroupDomainReltn> reltn = polDao.getPolicyGroupsByDomain(domain.getId());
@@ -47,39 +45,31 @@ public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends Cer
     }
 
     @Test
-    public void testDisassociatePolicyGroupFromDomain_unknownDomain_assertException()
-    {
+    public void testDisassociatePolicyGroupFromDomain_unknownDomain_assertException() {
         boolean exceptionOccured = false;
-        final EntityManager mgr = mock(EntityManager.class);
-    
         
         final DomainDao domainDao = mock(DomainDao.class);
-        
         final CertPolicyDaoImpl dao  = new CertPolicyDaoImpl();
-        dao.setDomainDao(domainDao);
-        
         
         CertPolicyDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.disassociatePolicyGroupFromDomain(1234, 5678);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
+        
         verify(domainDao, times(1)).getDomain(new Long(1234));
         verify(spyDao, never()).getPolicyGroupById(5678);        
     }
 
 
     @Test
-    public void testDisassociatePolicyGroupFromDomain_unknownPolicy_assertException()
-    {
+    public void testDisassociatePolicyGroupFromDomain_unknownPolicy_assertException() {
         boolean exceptionOccured = false;
+        
         final EntityManager mgr = mock(EntityManager.class);
         final Domain domain = mock(Domain.class);
         
@@ -91,30 +81,23 @@ public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends Cer
         doThrow(new NoResultException()).when(query).getSingleResult();
         when(mgr.createQuery("SELECT cpg from CertPolicyGroup cpg WHERE cpg.id = ?1")).thenReturn(query);
         
-        dao.setDomainDao(domainDao);
-        
-        
         final CertPolicyDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.disassociatePolicyGroupFromDomain(1234, 5678);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
+        
         verify(domainDao, times(1)).getDomain(new Long(1234));
         verify(spyDao, times(1)).getPolicyGroupById(5678);        
         verify(mgr, never()).remove((CertPolicyGroupDomainReltn)any());                
     }        
 
-
     @Test
-    public void testDisassociatePolicyGroupFromDomain_associationNotMade_assertException()
-    {
+    public void testDisassociatePolicyGroupFromDomain_associationNotMade_assertException() {
         boolean exceptionOccured = false;
         
         final Domain domain = new Domain();
@@ -126,16 +109,12 @@ public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends Cer
         
         polDao.addPolicyGroup(group);
         
-        
         Collection<CertPolicyGroupDomainReltn> reltn = polDao.getPolicyGroupsByDomain(domain.getId());
         assertEquals(0, reltn.size());
         
-        try
-        {
+        try {
             polDao.disassociatePolicyGroupFromDomain(domain.getId(), group.getId());
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
@@ -143,31 +122,25 @@ public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends Cer
     }    
 
     @Test
-    public void testDisassociatePolicyGroupFromDomain_noEntityManager_assertException()
-    {
-
+    public void testDisassociatePolicyGroupFromDomain_noEntityManager_assertException() {
         final CertPolicyDaoImpl dao = new CertPolicyDaoImpl();
         
         boolean exceptionOccured = false;
         
-        try
-        {
+        try {
             dao.disassociatePolicyGroupFromDomain(1234, 5678);
-        }
-        catch (IllegalStateException ex)
-        {
+        } catch (IllegalStateException ex) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
-        
-    }    
+    }
 
     @Test
-    public void testDisassociatePolicyGroupFromDomain_unknownErrorInRemove_assertException()
-    {
+    public void testDisassociatePolicyGroupFromDomain_unknownErrorInRemove_assertException() {
         boolean exceptionOccured = false;
         final EntityManager mgr = mock(EntityManager.class);
+        
         doThrow(new RuntimeException("Just Passing Through")).when(mgr).remove((CertPolicyGroupDomainReltn)any());
         final Domain domain = mock(Domain.class);
         
@@ -186,25 +159,18 @@ public class CertPolicyDaoImpl_disassociatePolicyGroupFromDomainTest extends Cer
                 " and cpr.certPolicyGroup = ?2 ")).thenReturn(findReltnQeury);
         
         final CertPolicyDaoImpl dao  = new CertPolicyDaoImpl();
-        dao.setDomainDao(domainDao);
-        
-        
-        
         final CertPolicyDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.disassociatePolicyGroupFromDomain(1234, 5678);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
+        
         verify(domainDao, times(1)).getDomain(1234L);
         verify(spyDao, times(1)).getPolicyGroupById(5678);    
         verify(mgr, times(1)).remove((CertPolicyGroupDomainReltn)any());                
-    }        
-
+    }
 }

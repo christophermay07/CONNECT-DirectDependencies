@@ -35,6 +35,7 @@ public class SettingServiceImpl implements SettingService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void add(String name, String value) {
         log.debug("Enter");
 
@@ -65,6 +66,7 @@ public class SettingServiceImpl implements SettingService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void delete(Collection<String> names) {
         log.debug("Enter");
 
@@ -95,6 +97,7 @@ public class SettingServiceImpl implements SettingService {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    @Override
     public Collection<Setting> getAll() {
         log.debug("Enter");
 
@@ -118,6 +121,7 @@ public class SettingServiceImpl implements SettingService {
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    @Override
     public Collection<Setting> getByNames(Collection<String> names) {
         log.debug("Enter");
 
@@ -158,6 +162,7 @@ public class SettingServiceImpl implements SettingService {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(String name, String value) {
         log.debug("Enter");
 

@@ -82,16 +82,6 @@
     <bean id="trustBundleDao" class="org.nhindirect.config.store.dao.impl.TrustBundleDaoImpl"/> 
     <bean id="certPolicyDao" class="org.nhindirect.config.store.dao.impl.CertPolicyDaoImpl"/>
 
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-       <property name="persistenceUnitName" value="config-store" />
-    </bean>
-
-    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
-
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" />
-
     <!--  Camel Context for cache update and trust bundle processors -->
     <bean id="bundleRefreshProcessor" class="org.nhindirect.config.processor.impl.DefaultBundleRefreshProcessorImpl">
         <property name="dao" ref="trustBundleDao"/>

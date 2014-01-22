@@ -27,6 +27,7 @@ import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -166,7 +167,7 @@ public class Domain {
      * @return the value of status.
      */
     @Column(name = "status")
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     @XmlAttribute
     public EntityStatus getStatus() {
         return status;

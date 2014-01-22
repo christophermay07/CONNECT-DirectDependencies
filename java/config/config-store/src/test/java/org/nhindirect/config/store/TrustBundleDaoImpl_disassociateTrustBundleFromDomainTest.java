@@ -21,21 +21,21 @@ import org.junit.Test;
 import org.nhindirect.config.store.dao.DomainDao;
 import org.nhindirect.config.store.dao.impl.TrustBundleDaoImpl;
 
-public class TrustBundleDaoImpl_disassociateTrustBundleFromDomainTest extends TrustBundleDaoBaseTest
-{
+public class TrustBundleDaoImpl_disassociateTrustBundleFromDomainTest extends TrustBundleDaoBaseTest {
     @Test
-    public void testDisassociateTrustBundleFromDomain_associateDomainAndBundle_assertAssociationRemoved()
-    {
+    public void testDisassociateTrustBundleFromDomain_associateDomainAndBundle_assertAssociationRemoved() {
         final Domain domain = new Domain();
+        
         domain.setDomainName("Test Domain");
         dmDao.add(domain);
         
         final TrustBundle bundle = new TrustBundle();
+        
         bundle.setBundleName("Test Bundle");
         bundle.setBundleURL("http://test/url/bundle");
         bundle.setCheckSum("1234");
-        tbDao.addTrustBundle(bundle);
         
+        tbDao.addTrustBundle(bundle);
         tbDao.associateTrustBundleToDomain(domain.getId(), bundle.getId(), true, true);
         
         Collection<TrustBundleDomainReltn> bundles = tbDao.getTrustBundlesByDomain(domain.getId());
@@ -48,26 +48,17 @@ public class TrustBundleDaoImpl_disassociateTrustBundleFromDomainTest extends Tr
     }
     
     @Test
-    public void testDisassociateTrustBundleFromDomain_unknownDomain_assertException()
-    {
+    public void testDisassociateTrustBundleFromDomain_unknownDomain_assertException() {
         boolean exceptionOccured = false;
-        final EntityManager mgr = mock(EntityManager.class);
-    
-        
+
         final DomainDao domainDao = mock(DomainDao.class);
-        
         final TrustBundleDaoImpl dao  = new TrustBundleDaoImpl();
-        dao.setDomainDao(domainDao);
-        
         
         TrustBundleDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.disassociateTrustBundleFromDomain(1234, 5678);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
@@ -77,65 +68,59 @@ public class TrustBundleDaoImpl_disassociateTrustBundleFromDomainTest extends Tr
     }
     
     @Test
-    public void testDisassociateTrustBundleFromDomain_unknownTrustBundle_assertException()
-    {
+    public void testDisassociateTrustBundleFromDomain_unknownTrustBundle_assertException() {
         boolean exceptionOccured = false;
         final EntityManager mgr = mock(EntityManager.class);
-        final Domain domain = mock(Domain.class);
         
+        final Domain domain = mock(Domain.class);
         final DomainDao domainDao = mock(DomainDao.class);
+
         when(domainDao.getDomain(new Long(1234))).thenReturn(domain);
         
         final TrustBundleDaoImpl dao  = new TrustBundleDaoImpl();
         final Query query = mock(Query.class);
+        
         doThrow(new NoResultException()).when(query).getSingleResult();
         when(mgr.createQuery("SELECT tb from TrustBundle tb WHERE tb.id = ?1")).thenReturn(query);
         
-        dao.setDomainDao(domainDao);
-        
-        
         final TrustBundleDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.disassociateTrustBundleFromDomain(1234, 5678);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
+        
         verify(domainDao, times(1)).getDomain(new Long(1234));
         verify(spyDao, times(1)).getTrustBundleById(5678);        
         verify(mgr, never()).remove((TrustBundleDomainReltn)any());                
     }        
     
     @Test
-    public void testDisassociateTrustBundleFromDomain_associationNotMade_assertException()
-    {
+    public void testDisassociateTrustBundleFromDomain_associationNotMade_assertException() {
         boolean exceptionOccured = false;
         
         final Domain domain = new Domain();
+        
         domain.setDomainName("Test Domain");
         dmDao.add(domain);
         
         final TrustBundle bundle = new TrustBundle();
+        
         bundle.setBundleName("Test Bundle");
         bundle.setBundleURL("http://test/url/bundle");
         bundle.setCheckSum("1234");
-        tbDao.addTrustBundle(bundle);
         
+        tbDao.addTrustBundle(bundle);
         
         Collection<TrustBundleDomainReltn> bundles = tbDao.getTrustBundlesByDomain(domain.getId());
         assertEquals(0, bundles.size());
         
-        try
-        {
+        try {
             tbDao.disassociateTrustBundleFromDomain(domain.getId(), bundle.getId());
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
@@ -143,34 +128,28 @@ public class TrustBundleDaoImpl_disassociateTrustBundleFromDomainTest extends Tr
     }    
     
     @Test
-    public void testDisassociateTrustBundleFromDomain_noEntityManager_assertException()
-    {
-
+    public void testDisassociateTrustBundleFromDomain_noEntityManager_assertException() {
         final TrustBundleDaoImpl dao = new TrustBundleDaoImpl();
         
         boolean exceptionOccured = false;
         
-        try
-        {
+        try {
             dao.disassociateTrustBundleFromDomain(1234, 5678);
-        }
-        catch (IllegalStateException ex)
-        {
+        } catch (IllegalStateException ex) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
-        
-    }    
+    }
     
     @Test
-    public void testDisassociateTrustBundleFromDomain_unknownErrorInRemove_assertException()
-    {
+    public void testDisassociateTrustBundleFromDomain_unknownErrorInRemove_assertException() {
         boolean exceptionOccured = false;
         final EntityManager mgr = mock(EntityManager.class);
+
         doThrow(new RuntimeException("Just Passing Through")).when(mgr).remove((TrustBundleDomainReltn)any());
+
         final Domain domain = mock(Domain.class);
-        
         final DomainDao domainDao = mock(DomainDao.class);
         when(domainDao.getDomain(new Long(1234))).thenReturn(domain);
         
@@ -186,22 +165,16 @@ public class TrustBundleDaoImpl_disassociateTrustBundleFromDomainTest extends Tr
                     " and tbd.trustBundle = ?2 ")).thenReturn(findReltnQeury);
         
         final TrustBundleDaoImpl dao  = new TrustBundleDaoImpl();
-        dao.setDomainDao(domainDao);
-        
-        
-        
         final TrustBundleDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.disassociateTrustBundleFromDomain(1234, 5678);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
+        
         verify(domainDao, times(1)).getDomain(new Long(1234));
         verify(spyDao, times(1)).getTrustBundleById(5678);    
         verify(mgr, times(1)).remove((TrustBundleDomainReltn)any());                

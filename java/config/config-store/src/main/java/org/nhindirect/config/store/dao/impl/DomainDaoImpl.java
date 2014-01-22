@@ -34,7 +34,9 @@ import org.nhindirect.config.store.ConfigurationStoreException;
 import org.nhindirect.config.store.Domain;
 import org.nhindirect.config.store.EntityStatus;
 import org.nhindirect.config.store.dao.AddressDao;
+import org.nhindirect.config.store.dao.CertPolicyDao;
 import org.nhindirect.config.store.dao.DomainDao;
+import org.nhindirect.config.store.dao.TrustBundleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -51,6 +53,12 @@ public class DomainDaoImpl implements DomainDao {
 
     @Autowired
     private AddressDao addressDao;
+
+    @Autowired
+    private TrustBundleDao trustBundleDao;
+    
+    @Autowired
+    private CertPolicyDao certPolicyDao;
 
     private static final Log log = LogFactory.getLog(DomainDaoImpl.class);
 
@@ -71,12 +79,12 @@ public class DomainDaoImpl implements DomainDao {
      */
 
     public void add(Domain item) {
+        log.debug("Enter");
 
-            log.debug("Enter");
-
-        if (item.getDomainName() == null || item.getDomainName().isEmpty())
+        if (item.getDomainName() == null || item.getDomainName().isEmpty()) {
             throw new ConfigurationStoreException("Domain name cannot be empty or null");
-
+        }
+        
         // Save and clear Address information until the Domain is saved.
         // This is really something that JPA should be doing, but doesn't seem
         // to work.
@@ -92,36 +100,33 @@ public class DomainDaoImpl implements DomainDao {
             item.setCreateTime(Calendar.getInstance());
             item.setUpdateTime(item.getCreateTime());
 
-
-                log.debug("Calling JPA to persist the Domain");
+            log.debug("Calling JPA to persist the Domain");
 
             domainService.add(item);
 
-
-                log.debug("Persisted the bare Domain");
+            log.debug("Persisted the bare Domain");
 
             boolean needUpdate = false;
+
             if ((addresses != null) && (addresses.size() > 0)) {
                 item.setAddresses(addresses);
                 needUpdate = true;
             }
+            
             if ((pm != null) && (pm.length() > 0)) {
                 item.setPostMasterEmail(pm);
                 needUpdate = true;
             }
 
             if (needUpdate) {
-
-                    log.debug("Updating the domain with Address info");
+                log.debug("Updating the domain with Address info");
                 update(item);
             }
 
-
-                log.debug("Returned from JPA: Domain ID=" + item.getId());
+            log.debug("Returned from JPA: Domain ID=" + item.getId());
         }
 
-
-            log.debug("Exit");
+        log.debug("Exit");
     }
 
     /*
@@ -131,15 +136,14 @@ public class DomainDaoImpl implements DomainDao {
      */
 
     public void update(Domain item) {
-
-            log.debug("Enter");
+        log.debug("Enter");
 
         if (item != null) {
             item.setUpdateTime(Calendar.getInstance());
 
             if ((item.getPostMasterEmail() != null) && (item.getPostMasterEmail().length() > 0)) {
-
                 boolean found = false;
+                
                 Iterator<Address> addrs = item.getAddresses().iterator();
                 while (addrs.hasNext()) {
                     if (addrs.next().getEmailAddress().equals(item.getPostMasterEmail())) {
@@ -148,16 +152,15 @@ public class DomainDaoImpl implements DomainDao {
                     }
                 }
                 if (!found) {
-
-                        log.debug("Adding new postmaster email address: " + item.getPostMasterEmail());
+                    log.debug("Adding new postmaster email address: " + item.getPostMasterEmail());
                     item.getAddresses().add(new Address(item, item.getPostMasterEmail(), "Postmaster"));
                 }
             }
 
             for (Address address : item.getAddresses()) {
                 if ((address.getId() == null) || (address.getId().longValue() == 0)) {
+                    log.debug("Adding " + address.toString() + " to database");
 
-                        log.debug("Adding " + address.toString() + " to database");
                     addressDao.add(address);
                 }
             }
@@ -169,21 +172,19 @@ public class DomainDaoImpl implements DomainDao {
                 while (addrs.hasNext()) {
                     Address address = addrs.next();
                     if (address.getDisplayName().equals("Postmaster")) {
-
-                            log.debug("Linking domain's postmaster email address to " + address.toString());
+                        log.debug("Linking domain's postmaster email address to " + address.toString());
                         item.setPostmasterAddressId(address.getId());
                         break;
                     }
                 }
             }
 
-                log.debug("Calling JPA to perform update...");
+            log.debug("Calling JPA to perform update...");
 
             domainService.update(item);
         }
 
-
-            log.debug("Exit");
+        log.debug("Exit");
     }
 
     /*
@@ -191,7 +192,7 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#save(org.nhindirect.config.store.Domain)
      */
-
+    @Override
     public void save(Domain item) {
         update(item);
     }
@@ -201,10 +202,9 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#delete(java.lang.String)
      */
-
+    @Override
     public void delete(String name) {
-
-            log.debug("Enter");
+        log.debug("Enter");
 
         // delete addresses first if they exist
         final Domain domain = getDomainByName(name);
@@ -218,8 +218,7 @@ public class DomainDaoImpl implements DomainDao {
             log.warn("No domain matching the name: " + name + " found.  Unable to delete.");
         }
 
-
-            log.debug("Exit");
+        log.debug("Exit");
     }
 
     /*
@@ -227,9 +226,9 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#delete(java.lang.String)
      */
+    @Override
     public void delete(Long anId) {
-
-            log.debug("Enter");
+        log.debug("Enter");
 
         final Domain domain = getDomain(anId);
 
@@ -242,8 +241,7 @@ public class DomainDaoImpl implements DomainDao {
            log.warn("No domain matching the id: " + anId + " found.  Unable to delete.");
         }
 
-
-            log.debug("Exit");
+        log.debug("Exit");
     }
 
     public void delete(Domain domain) {
@@ -255,7 +253,7 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomainByName(java.lang.String)
      */
-
+    @Override
     public Domain getDomainByName(String name) {
         return domainService.getDomainByName(name);
     }
@@ -268,6 +266,7 @@ public class DomainDaoImpl implements DomainDao {
      * Convert the list of names into a String to be used in an IN clause (i.e.
      * {"One", "Two", "Three"} --> ('One', 'Two', 'Three'))
      */
+    @Override
     public List<Domain> getDomains(List<String> names, EntityStatus status) {
         return domainService.getDomains(names, status);
     }
@@ -277,6 +276,7 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#listDomains(java.lang.String, int)
      */
+    @Override
     public List<Domain> listDomains(String name, int count) {
         return domainService.listDomains(name, count);
     }
@@ -286,6 +286,7 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#searchDomain(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
+    @Override
     public List<Domain> searchDomain(String name, EntityStatus status) {
         return domainService.searchDomain(name, status);
     }
@@ -295,6 +296,7 @@ public class DomainDaoImpl implements DomainDao {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomain(java.lang.Long)
      */
+    @Override
     public Domain getDomain(Long id) {
         return domainService.getDomain(id);
     }
@@ -308,14 +310,10 @@ public class DomainDaoImpl implements DomainDao {
     }
 
     protected void disassociateTrustBundlesFromDomain(long domainId) throws ConfigurationStoreException {
-        final TrustBundleDaoImpl dao = new TrustBundleDaoImpl();
-        dao.setDomainDao(this);
-        dao.disassociateTrustBundlesFromDomain(domainId);
+        trustBundleDao.disassociateTrustBundlesFromDomain(domainId);
     }
 
     protected void removePolicyGroupFromDomain(long domainId) {
-        final CertPolicyDaoImpl dao = new CertPolicyDaoImpl();
-        dao.setDomainDao(this);
-        dao.disassociatePolicyGroupsFromDomain(domainId);
+        certPolicyDao.disassociatePolicyGroupsFromDomain(domainId);
     }
 }

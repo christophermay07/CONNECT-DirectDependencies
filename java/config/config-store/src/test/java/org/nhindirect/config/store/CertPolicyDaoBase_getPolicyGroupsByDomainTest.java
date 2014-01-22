@@ -19,11 +19,9 @@ import org.junit.Test;
 import org.nhindirect.config.store.dao.DomainDao;
 import org.nhindirect.config.store.dao.impl.CertPolicyDaoImpl;
 
-public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDaoBaseTest
-{
+public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDaoBaseTest {
     @Test
-    public void testGetPolicyGroupsByDomain_associationsExist_assertPoliciesRetrieved()
-    {
+    public void testGetPolicyGroupsByDomain_associationsExist_assertPoliciesRetrieved() {
         final Domain domain = new Domain();
         domain.setDomainName("Test Domain");
         dmDao.add(domain);
@@ -32,7 +30,6 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
         group.setPolicyGroupName("Test Group");
         
         polDao.addPolicyGroup(group);
-        
         polDao.associatePolicyGroupToDomain(domain.getId(), group.getId());
         
         final Collection<CertPolicyGroupDomainReltn> policies = polDao.getPolicyGroupsByDomain(domain.getId());
@@ -40,8 +37,7 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
     }
     
     @Test
-    public void testGetPolicyGroupsByDomain_multipleAssociationsExist_assertPoliciesRetrieved()
-    {
+    public void testGetPolicyGroupsByDomain_multipleAssociationsExist_assertPoliciesRetrieved() {
         final Domain domain = new Domain();
         domain.setDomainName("Test Domain");
         dmDao.add(domain);
@@ -50,7 +46,6 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
         group1.setPolicyGroupName("Test Group1");
         
         polDao.addPolicyGroup(group1);
-        
 
         final CertPolicyGroup group2 = new CertPolicyGroup();
         group2.setPolicyGroupName("Test Group2");
@@ -69,8 +64,7 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
     }    
     
     @Test
-    public void testGetPolicyGroupsByDomain_multipleAssociationsExist_oneToEachDomain_assertPoliciesRetrieved()
-    {
+    public void testGetPolicyGroupsByDomain_multipleAssociationsExist_oneToEachDomain_assertPoliciesRetrieved() {
         final Domain domain1 = new Domain();
         domain1.setDomainName("Test Domain 1");
         dmDao.add(domain1);
@@ -103,12 +97,10 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
         
         polIter = policies.iterator();
         assertEquals(group2.getPolicyGroupName(), polIter.next().getCertPolicyGroup().getPolicyGroupName());
-
-    }    
+    }
 
     @Test
-    public void testGetPolicyGroupsByDomain_multipleAssociationsExist_policyToMultipeDomains_assertPoliciesRetrieved()
-    {
+    public void testGetPolicyGroupsByDomain_multipleAssociationsExist_policyToMultipeDomains_assertPoliciesRetrieved() {
         final Domain domain1 = new Domain();
         domain1.setDomainName("Test Domain 1");
         dmDao.add(domain1);
@@ -121,8 +113,6 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
         group1.setPolicyGroupName("Test Group1");
         
         polDao.addPolicyGroup(group1);
-        
-        
         polDao.associatePolicyGroupToDomain(domain1.getId(), group1.getId());
         polDao.associatePolicyGroupToDomain(domain2.getId(), group1.getId());
         
@@ -137,14 +127,13 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
         
         polIter = policies.iterator();
         assertEquals(group1.getPolicyGroupName(), polIter.next().getCertPolicyGroup().getPolicyGroupName());
-
     }
     
 
     @Test
-    public void testGetPolicyGroupsByDomain_noPoliciesInDomain_assertPoliciesNotRetrieved()
-    {
+    public void testGetPolicyGroupsByDomain_noPoliciesInDomain_assertPoliciesNotRetrieved() {
         final Domain domain1 = new Domain();
+        
         domain1.setDomainName("Test Domain 1");
         dmDao.add(domain1);
         
@@ -154,15 +143,12 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
     
 
     @Test
-    public void testGetPolicyGroupsByDomain_unknownDomain_assertException()
-    {
+    public void testGetPolicyGroupsByDomain_unknownDomain_assertException() {
         boolean exceptionOccured = false;
-        try
-        {
+        
+        try {
             polDao.getPolicyGroupsByDomain(1234);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
@@ -170,29 +156,22 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
     }    
 
     @Test
-    public void testGetPolicyGroupsByDomain_noEntityManager_assertException()
-    {
-
+    public void testGetPolicyGroupsByDomain_noEntityManager_assertException() {
         final CertPolicyDaoImpl dao = new CertPolicyDaoImpl();
         
         boolean exceptionOccured = false;
         
-        try
-        {
+        try {
             dao.getPolicyGroupsByDomain(1234);
-        }
-        catch (IllegalStateException ex)
-        {
+        } catch (IllegalStateException ex) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
-        
     }    
 
     @Test
-    public void testGetPolicyGroupsByDomain_errorInGet_assertException()
-    {
+    public void testGetPolicyGroupsByDomain_errorInGet_assertException() {
         boolean exceptionOccured = false;
         final EntityManager mgr = mock(EntityManager.class);
         final Domain domain = mock(Domain.class);
@@ -207,22 +186,16 @@ public class CertPolicyDaoBase_getPolicyGroupsByDomainTest extends CertPolicyDao
         when(mgr.createQuery("SELECT cpr from CertPolicyGroupDomainReltn cpr where cpr.domain = ?1")).thenReturn(findReltnQeury);
         
         final CertPolicyDaoImpl dao  = new CertPolicyDaoImpl();
-        dao.setDomainDao(domainDao);
-        
         final CertPolicyDaoImpl spyDao = spy(dao);
         
-        try
-        {
+        try {
             spyDao.getPolicyGroupsByDomain(1234);
-        }
-        catch (ConfigurationStoreException e)
-        {
+        } catch (ConfigurationStoreException e) {
             exceptionOccured = true;
         }
         
         assertTrue(exceptionOccured);
         verify(domainDao, times(1)).getDomain(new Long(1234));
         verify(findReltnQeury, times(1)).getResultList();    
-    }    
-
+    }
 }

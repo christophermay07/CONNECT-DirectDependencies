@@ -51,8 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Stateless
 public class AnchorServiceImpl implements AnchorService {
 
-    @PersistenceContext
-    @Autowired
+	@PersistenceContext(unitName = "config-store")
     private EntityManager entityManager;
 
     private static final Log log = LogFactory.getLog(AnchorServiceImpl.class);
@@ -62,6 +61,7 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#load(java.lang.String)
      */
+    @Override
     public Anchor load(String owner)  {
         // not sure what this will accomplish...  multiple anchors are always possible for an owner
         Collection<Anchor> anchors = this.list(Arrays.asList(owner));
@@ -79,6 +79,7 @@ public class AnchorServiceImpl implements AnchorService {
      * @see org.nhindirect.config.store.dao.AnchorDao#listAll()
      */
     @SuppressWarnings("unchecked")
+    @Override
     public List<Anchor> listAll() {
         log.debug("Enter");
 
@@ -105,6 +106,7 @@ public class AnchorServiceImpl implements AnchorService {
      * @see org.nhindirect.config.store.dao.AnchorDao#list(java.util.List)
      */
     @SuppressWarnings("unchecked")
+    @Override
     public List<Anchor> list(List<String> owners) {
         log.debug("Enter");
 
@@ -118,11 +120,13 @@ public class AnchorServiceImpl implements AnchorService {
         StringBuffer nameList = new StringBuffer("(");
 
         for (String owner : owners) {
-            if (nameList.length() > 1) {
-                nameList.append(", ");
-            }
+            if (owner != null) {
+                if (nameList.length() > 1) {
+                    nameList.append(", ");
+                }
 
-            nameList.append("'").append(owner.toUpperCase(Locale.getDefault())).append("'");
+                nameList.append("'").append(owner.toUpperCase(Locale.getDefault())).append("'");
+            }
         }
 
         nameList.append(")");
@@ -149,6 +153,7 @@ public class AnchorServiceImpl implements AnchorService {
      * @param anchor
      *            The anchor to add.
      */
+    @Override
     public void add(Anchor anchor) {
         log.debug("Enter");
 
@@ -160,12 +165,14 @@ public class AnchorServiceImpl implements AnchorService {
 
                 if (anchor.getValidStartDate() == null) {
                     Calendar startDate = Calendar.getInstance();
+                    
                     startDate.setTime(cert.getNotBefore());
                     anchor.setValidStartDate(startDate);
                 }
 
                 if (anchor.getValidEndDate() == null) {
                     Calendar endDate = Calendar.getInstance();
+                    
                     endDate.setTime(cert.getNotAfter());
                     anchor.setValidEndDate(endDate);
                 }
@@ -192,9 +199,11 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#save(org.nhindirect.config.store.Anchor)
      */
+    @Override
     public void save(Anchor anchor) {
         if (anchor != null) {
             List<Anchor> anchors = new ArrayList<Anchor>();
+            
             anchors.add(anchor);
             save(anchors);
         }
@@ -205,6 +214,7 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#save(java.util.List)
      */
+    @Override
     public void save(List<Anchor> anchorList) {
         if (anchorList != null && anchorList.size() > 0) {
             for (Anchor anchor : anchorList) {
@@ -214,6 +224,7 @@ public class AnchorServiceImpl implements AnchorService {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public List<Anchor> listByIds(List<Long> anchorIds) {
         log.debug("Enter");
 
@@ -257,18 +268,19 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#setStatus(java.util.List, org.nhindirect.config.store.EntityStatus)
      */
-
+    @Override
     public void setStatus(List<Long> anchorIDs, EntityStatus status) {
-
-            log.debug("Enter");
+        log.debug("Enter");
 
         List<Anchor> anchors = listByIds(anchorIDs);
-        if (anchors == null || anchors.size() == 0)
-            return;
 
+        if (anchors == null || anchors.size() == 0) {
+            return;
+        }
+        
         for (Anchor anchor : anchors) {
             anchor.setStatus(status);
-                entityManager.merge(anchor);
+            entityManager.merge(anchor);
         }
 
         log.debug("Exit");
@@ -279,6 +291,7 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#setStatus(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
+    @Override
     public void setStatus(String owner, EntityStatus status) {
         log.debug("Enter");
 
@@ -309,7 +322,7 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#delete(java.util.List)
      */
-
+    @Override
     public void delete(List<Long> idList) {
         log.debug("Enter");
 
@@ -343,7 +356,7 @@ public class AnchorServiceImpl implements AnchorService {
      *
      * @see org.nhindirect.config.store.dao.AnchorDao#delete(java.lang.String)
      */
-
+    @Override
     public void delete(String owner)  {
         log.debug("Enter");
 
@@ -355,6 +368,7 @@ public class AnchorServiceImpl implements AnchorService {
 
         if (owner != null) {
             Query delete = entityManager.createQuery("DELETE FROM Anchor a WHERE UPPER(a.owner) = ?1");
+            
             delete.setParameter(1, owner.toUpperCase(Locale.getDefault()));
             count = delete.executeUpdate();
         }

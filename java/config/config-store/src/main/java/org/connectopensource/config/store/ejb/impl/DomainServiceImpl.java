@@ -28,6 +28,7 @@ public class DomainServiceImpl implements DomainService {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#count()
      */
+    @Override
     public int count() {
         log.debug("Enter");
 
@@ -38,16 +39,19 @@ public class DomainServiceImpl implements DomainService {
         return result.intValue();
     }
 
+    @Override
     public void add(Domain item) {
         entityManager.persist(item);
     }
 
+    @Override
     public void update(Domain item) {
         entityManager.merge(item);
     }
 
+    @Override
     public void delete(Domain domain) {
-        entityManager.remove(domain);
+        entityManager.remove(entityManager.merge(domain));
     }
 
     /*
@@ -55,6 +59,7 @@ public class DomainServiceImpl implements DomainService {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomainByName(java.lang.String)
      */
+    @Override
     public Domain getDomainByName(String name) {
         log.debug("Enter");
 
@@ -83,6 +88,7 @@ public class DomainServiceImpl implements DomainService {
      * {"One", "Two", "Three"} --> ('One', 'Two', 'Three'))
      */
     @SuppressWarnings("unchecked")
+    @Override
     public List<Domain> getDomains(List<String> names, EntityStatus status) {
         log.debug("Enter");
 
@@ -141,6 +147,7 @@ public class DomainServiceImpl implements DomainService {
     // TODO I'm not sure if this is doing the right thing. I suspect that the
     // real intent is to do some kind of db paging
     @SuppressWarnings("unchecked")
+    @Override
     public List<Domain> listDomains(String name, int count) {
         log.debug("Enter");
 
@@ -177,6 +184,7 @@ public class DomainServiceImpl implements DomainService {
      * @see org.nhindirect.config.store.dao.DomainDao#searchDomain(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
     @SuppressWarnings("unchecked")
+    @Override
     public List<Domain> searchDomain(String name, EntityStatus status) {
         log.debug("Enter");
 
@@ -224,6 +232,7 @@ public class DomainServiceImpl implements DomainService {
      *
      * @see org.nhindirect.config.store.dao.DomainDao#getDomain(java.lang.Long)
      */
+    @Override
     public Domain getDomain(Long id) {
 
         log.debug("Enter");

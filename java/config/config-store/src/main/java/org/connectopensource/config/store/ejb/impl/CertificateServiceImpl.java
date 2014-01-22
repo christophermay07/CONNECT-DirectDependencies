@@ -60,6 +60,7 @@ public class CertificateServiceImpl implements CertificateService {
      * @see org.nhindirect.config.store.dao.CertificateDao#load(java.lang.String, java.lang.String)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
     public Certificate load(String owner, String thumbprint) {
         log.debug("Enter");
 
@@ -99,6 +100,7 @@ public class CertificateServiceImpl implements CertificateService {
      * @see org.nhindirect.config.store.dao.CertificateDao#list(java.util.List)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
     public List<Certificate> list(List<Long> idList) {
         log.debug("Enter");
 
@@ -141,6 +143,7 @@ public class CertificateServiceImpl implements CertificateService {
      * @see org.nhindirect.config.store.dao.CertificateDao#list(java.lang.String)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
     public List<Certificate> list(String owner) {
         log.debug("Enter");
 
@@ -170,6 +173,7 @@ public class CertificateServiceImpl implements CertificateService {
      *
      * @see org.nhindirect.config.store.dao.CertificateDao#save(org.nhindirect.config.store.Certificate)
      */
+    @Override
     public void save(Certificate cert) {
         save(Arrays.asList(cert));
     }
@@ -179,6 +183,7 @@ public class CertificateServiceImpl implements CertificateService {
      *
      * @see org.nhindirect.config.store.dao.CertificateDao#save(java.util.List)
      */
+    @Override
     public void save(List<Certificate> certList) {
         log.debug("Enter");
 
@@ -235,6 +240,7 @@ public class CertificateServiceImpl implements CertificateService {
      *
      * @see org.nhindirect.config.store.dao.CertificateDao#setStatus(java.util.List, org.nhindirect.config.store.EntityStatus)
      */
+    @Override
     public void setStatus(List<Long> certificateIDs, EntityStatus status) {
         log.debug("Enter");
 
@@ -257,6 +263,7 @@ public class CertificateServiceImpl implements CertificateService {
      *
      * @see org.nhindirect.config.store.dao.CertificateDao#setStatus(java.lang.String, org.nhindirect.config.store.EntityStatus)
      */
+    @Override
     public void setStatus(String owner, EntityStatus status) {
         log.debug("Enter");
 
@@ -279,6 +286,7 @@ public class CertificateServiceImpl implements CertificateService {
      *
      * @see org.nhindirect.config.store.dao.CertificateDao#delete(java.util.List)
      */
+    @Override
     public void delete(List<Long> idList) {
         log.debug("Enter");
 
@@ -312,6 +320,7 @@ public class CertificateServiceImpl implements CertificateService {
      *
      * @see org.nhindirect.config.store.dao.CertificateDao#delete(java.lang.String)
      */
+    @Override
     public void delete(String owner) {
         log.debug("Enter");
 

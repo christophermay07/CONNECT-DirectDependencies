@@ -21,13 +21,8 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     @Autowired
     private CertPolicyService certPolicyService;
 
-    protected DomainDao domainDao;
-
     @Autowired
-    public void setDomainDao(DomainDao domainDao)
-    {
-        this.domainDao = domainDao;
-    }
+    protected DomainDao domainDao;
 
     @Override
     public Collection<CertPolicy> getPolicies() throws ConfigurationStoreException {
@@ -110,30 +105,24 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
     }
 
     @Override
-    public void associatePolicyGroupToDomain(long domainId, long policyGroupId)
-            throws ConfigurationStoreException {
-        // make sure the domain exists
-        final Domain domain = domainDao.getDomain(domainId);
-        if (domain == null)
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-
+    public void associatePolicyGroupToDomain(long domainId, long policyGroupId) throws ConfigurationStoreException {
         // make sure the policy group exists
         final CertPolicyGroup policyGroup = this.getPolicyGroupById(policyGroupId);
-        if (policyGroup == null)
+        final Domain domain = domainDao.getDomain(domainId);
+        
+        if (policyGroup == null) {
             throw new ConfigurationStoreException("Policy group with id " + policyGroup + " does not exist");
-
+        }
+        
         certPolicyService.associatePolicyGroupToDomain(domain, policyGroup);
     }
 
     @Override
     public void disassociatePolicyGroupFromDomain(long domainId, long policyGroupId) throws ConfigurationStoreException {
-        // make sure the domain exists
-        final Domain domain = domainDao.getDomain(domainId);
-        if (domain == null)
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-
         // make sure the policy group exists
         final CertPolicyGroup policyGroup = this.getPolicyGroupById(policyGroupId);
+        final Domain domain = domainDao.getDomain(domainId);
+        
         if (policyGroup == null) {
             throw new ConfigurationStoreException("Policy group with id " + policyGroup + " does not exist");
         }
@@ -143,11 +132,8 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
 
     @Override
     public void disassociatePolicyGroupsFromDomain(long domainId) throws ConfigurationStoreException  {
-        // make sure the domain exists
         final Domain domain = domainDao.getDomain(domainId);
-        if (domain == null)
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-
+        
         certPolicyService.disassociatePolicyGroupsFromDomain(domain);
     }
 
@@ -163,13 +149,8 @@ public class CertPolicyDaoImpl implements CertPolicyDao {
 
     @Override
     public Collection<CertPolicyGroupDomainReltn> getPolicyGroupsByDomain(long domainId) throws ConfigurationStoreException {
-        // make sure the domain exists
         final Domain domain = domainDao.getDomain(domainId);
-
-        if (domain == null) {
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
-        }
-
+        
         return certPolicyService.getPolicyGroupsByDomain(domain);
     }
 }

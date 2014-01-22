@@ -21,30 +21,14 @@
 
 package org.nhindirect.config.store.dao.impl;
 
-import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.connectopensource.config.store.ejb.AnchorService;
-import org.connectopensource.config.store.ejb.DomainService;
 import org.nhindirect.config.store.Anchor;
-import org.nhindirect.config.store.CertificateException;
 import org.nhindirect.config.store.EntityStatus;
 import org.nhindirect.config.store.dao.AnchorDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementing class for Anchor DAO methods.

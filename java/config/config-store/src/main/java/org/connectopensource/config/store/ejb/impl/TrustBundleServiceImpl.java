@@ -31,14 +31,6 @@ public class TrustBundleServiceImpl implements TrustBundleService {
     private static final Log log = LogFactory.getLog(TrustBundleServiceImpl.class);
 
     /**
-     * Sets the entity manager for access to the underlying data store medium.
-     * @param entityManager The entity manager.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")

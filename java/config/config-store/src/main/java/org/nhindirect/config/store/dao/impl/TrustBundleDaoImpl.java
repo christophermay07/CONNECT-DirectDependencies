@@ -34,6 +34,7 @@ import org.nhindirect.config.store.Domain;
 import org.nhindirect.config.store.TrustBundle;
 import org.nhindirect.config.store.TrustBundleAnchor;
 import org.nhindirect.config.store.TrustBundleDomainReltn;
+import org.nhindirect.config.store.dao.AddressDao;
 import org.nhindirect.config.store.dao.DomainDao;
 import org.nhindirect.config.store.dao.TrustBundleDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,27 +49,11 @@ import org.springframework.stereotype.Repository;
 public class TrustBundleDaoImpl implements TrustBundleDao {
 
     @Autowired
-    protected TrustBundleService trustBundleService;
+    private TrustBundleService trustBundleService;
 
     @Autowired
-    protected DomainDao domainDao;
-
-    /**
-     * Empty constructor
-     */
-    public TrustBundleDaoImpl() {
-    }
-
-    /**
-     * Sets the DomainDao used for validating the exists of domains for
-     * domain to trust bundle association
-     * @param domainDao The domain dao
-     */
-    @Autowired
-    public void setDomainDao(DomainDao domainDao) {
-        this.domainDao = domainDao;
-    }
-
+    private DomainDao domainDao;
+    
     /**
      * {@inheritDoc}
      */
@@ -156,11 +141,10 @@ public class TrustBundleDaoImpl implements TrustBundleDao {
     public void associateTrustBundleToDomain(long domainId, long trustBundleId, boolean incoming,
             boolean outgoing) throws ConfigurationStoreException {
 
-        // make sure the domain exists
-        final Domain domain = domainDao.getDomain(domainId);
-
+    	final Domain domain = domainDao.getDomain(domainId);
+    	
         if (domain == null) {
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
+            throw new ConfigurationStoreException("Domain does not exist");
         }
 
         // make sure the trust bundle exists
@@ -189,11 +173,11 @@ public class TrustBundleDaoImpl implements TrustBundleDao {
      */
     @Override
     public void disassociateTrustBundleFromDomain(long domainId, long trustBundleId) throws ConfigurationStoreException {
+    	final Domain domain = domainDao.getDomain(domainId);
+    	
         // make sure the domain exists
-        final Domain domain = domainDao.getDomain(domainId);
-
         if (domain == null) {
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
+            throw new ConfigurationStoreException("Domain does not exist");
         }
 
         // make sure the trust bundle exists
@@ -206,7 +190,7 @@ public class TrustBundleDaoImpl implements TrustBundleDao {
         try {
             trustBundleService.disassociateTrustBundleFromDomain(domain, trustBundle);
         } catch (NoResultException e) {
-            throw new ConfigurationStoreException("Association between domain id " + domainId + " and trust bundle id"
+            throw new ConfigurationStoreException("Association between domain id " + domain.getId() + " and trust bundle id"
                      + trustBundleId + " does not exist", e);
         } catch (Exception e) {
             throw new ConfigurationStoreException("Failed to delete trust bundle to domain relation.", e);
@@ -218,17 +202,17 @@ public class TrustBundleDaoImpl implements TrustBundleDao {
      */
     @Override
     public void disassociateTrustBundlesFromDomain(long domainId) throws ConfigurationStoreException {
+    	final Domain domain = domainDao.getDomain(domainId);
+    	
         // make sure the domain exists
-        final Domain domain = domainDao.getDomain(domainId);
-
         if (domain == null) {
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
+            throw new ConfigurationStoreException("Domain does not exist");
         }
 
         try {
             trustBundleService.disassociateTrustBundleFromDomain(domain);
         } catch (Exception e) {
-            throw new ConfigurationStoreException("Failed to disassociate trust bundle from domain id ." + domainId, e);
+            throw new ConfigurationStoreException("Failed to disassociate trust bundle from domain id ." + domain.getId(), e);
         }
     }
 
@@ -245,11 +229,11 @@ public class TrustBundleDaoImpl implements TrustBundleDao {
      */
     @Override
     public Collection<TrustBundleDomainReltn> getTrustBundlesByDomain(long domainId) throws ConfigurationStoreException {
-        // make sure the domain exists
-        final Domain domain = domainDao.getDomain(domainId);
-
+    	final Domain domain = domainDao.getDomain(domainId);
+    	
+    	// make sure the domain exists
         if (domain == null) {
-            throw new ConfigurationStoreException("Domain with id " + domainId + " does not exist");
+            throw new ConfigurationStoreException("Domain does not exist");
         }
 
         return trustBundleService.getTrustBundlesByDomain(domain);

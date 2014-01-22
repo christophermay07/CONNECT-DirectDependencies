@@ -121,7 +121,7 @@ public interface TrustBundleDao
     /**
      * Associates a domain to a trust bundle.  Bundle associates are directional and may be set as incoming only, outgoing only,
      * or incoming and outgoing.
-     * @param domainId The id of the domain.
+     * @param domainId The domain id
      * @param trustBundleId The id of the trust bundle.
      * @param incoming Indicates if the trust should allow incoming messages.
      * @param outgoing Indicates if the trust should allow outgoing messages.
@@ -133,7 +133,7 @@ public interface TrustBundleDao
     
     /**
      * Dissociates a domain from a trust bundle.
-     * @param domainId The id of the domain
+     * @param domainId The domain id
      * @param trustBundleId The id of the trust bundle
      * @throws ConfigurationStoreException
      */
@@ -141,7 +141,7 @@ public interface TrustBundleDao
     
     /**
      * Dissociates a domain from all trust bundles.
-     * @param domainId The id of the domain
+     * @param domainId The domain id
      * @throws ConfigurationStoreException
      */
     public void disassociateTrustBundlesFromDomain(long domainId) throws ConfigurationStoreException;    

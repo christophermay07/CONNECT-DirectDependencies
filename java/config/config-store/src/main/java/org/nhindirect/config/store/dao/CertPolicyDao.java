@@ -7,6 +7,7 @@ import org.nhindirect.config.store.CertPolicyGroup;
 import org.nhindirect.config.store.CertPolicyUse;
 import org.nhindirect.config.store.ConfigurationStoreException;
 import org.nhindirect.config.store.CertPolicyGroupDomainReltn;
+import org.nhindirect.config.store.Domain;
 import org.nhindirect.policy.PolicyLexicon;
 
 public interface CertPolicyDao 

@@ -56,7 +56,7 @@ public class AddressServiceImpl implements AddressService {
      *
      * @see org.nhindirect.config.store.dao.AddressDao#count()
      */
-
+    @Override
     public int count() {
         log.debug("Enter");
 
@@ -72,7 +72,7 @@ public class AddressServiceImpl implements AddressService {
      *
      * @see org.nhindirect.config.store.dao.AddressDao#add(org.nhindirect.config.store.Address)
      */
-
+    @Override
     public void add(Address item) {
         log.debug("Enter");
 
@@ -90,6 +90,7 @@ public class AddressServiceImpl implements AddressService {
      *
      * @see org.nhindirect.config.store.dao.AddressDao#update(org.nhindirect.config.store.Address)
      */
+    @Override
     public void update(Address item) {
         log.debug("Enter");
 
@@ -97,12 +98,13 @@ public class AddressServiceImpl implements AddressService {
             Address inDb = entityManager.find(Address.class, item.getId());
 
             inDb.setDisplayName(item.getDisplayName());
-            inDb.setEndpoint(item.getEndpoint());
-            inDb.setDomain(item.getDomain());
             inDb.setEmailAddress(item.getEmailAddress());
-            inDb.setType(item.getType());
+            inDb.setEndpoint(item.getEndpoint());
             inDb.setStatus(item.getStatus());
+            inDb.setType(item.getType());
+            inDb.setCreateTime(item.getCreateTime());
             inDb.setUpdateTime(Calendar.getInstance());
+            inDb.setDomain(item.getDomain());
 
             entityManager.merge(inDb);
         }
@@ -115,6 +117,7 @@ public class AddressServiceImpl implements AddressService {
      *
      * @see org.nhindirect.config.store.dao.AddressDao#save(org.nhindirect.config.store.Address)
      */
+    @Override
     public void save(Address item) {
         update(item);
     }
@@ -126,6 +129,7 @@ public class AddressServiceImpl implements AddressService {
      */
     // TODO Check to see if this address is a postmaster Address and remove it
     // from Domain prior to deletion
+    @Override
     public void delete(String name) {
         log.debug("Enter");
 
@@ -133,6 +137,7 @@ public class AddressServiceImpl implements AddressService {
 
         if (name != null) {
             Query delete = entityManager.createQuery("DELETE FROM Address a WHERE UPPER(a.emailAddress) = ?1");
+
             delete.setParameter(1, name.toUpperCase(Locale.getDefault()));
             count = delete.executeUpdate();
         }
@@ -147,6 +152,7 @@ public class AddressServiceImpl implements AddressService {
      *
      * The function below is verbatim from the RI 3.0.1 AddressDaoImpl; there is no implementation at the moment.
      */
+    @Override
     public List<Address> listAddresses(String name, int count) {
         // TODO Auto-generated method stub
         return null;
@@ -157,7 +163,7 @@ public class AddressServiceImpl implements AddressService {
      *
      * @see org.nhindirect.config.store.dao.AddressDao#get(java.lang.String)
      */
-
+    @Override
     public Address get(String name) {
         log.debug("Enter");
 
@@ -165,6 +171,7 @@ public class AddressServiceImpl implements AddressService {
 
         if (name != null) {
             Query select = entityManager.createQuery("SELECT DISTINCT a from Address a d WHERE UPPER(a.emailAddress) = ?1");
+            
             result = (Address) select.setParameter(1, name.toUpperCase(Locale.getDefault())).getSingleResult();
         }
 
@@ -179,6 +186,7 @@ public class AddressServiceImpl implements AddressService {
      * @see org.nhindirect.config.store.dao.AddressDao#listAddresses(java.util.List, org.nhindirect.config.store.EntityStatus)
      */
     @SuppressWarnings("unchecked")
+    @Override
     public List<Address> listAddresses(List<String> names, EntityStatus status) {
         log.debug("Enter");
 
@@ -235,6 +243,7 @@ public class AddressServiceImpl implements AddressService {
      * @see org.nhindirect.config.store.dao.AddressDao#getByDomain(org.nhindirect.config.store.Domain, org.nhindirect.config.store.EntityStatus)
      */
     @SuppressWarnings("unchecked")
+    @Override
     public List<Address> getByDomain(Domain domain, EntityStatus status) {
         log.debug("Enter");
 
@@ -273,24 +282,5 @@ public class AddressServiceImpl implements AddressService {
         log.debug("Exit");
 
         return result;
-    }
-
-    /**
-     * Get the value of entityManager.
-     *
-     * @return the value of entityManager.
-     */
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    /**
-     * Set the value of entityManager.
-     *
-     * @param entityManager
-     *            The value of entityManager.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 }

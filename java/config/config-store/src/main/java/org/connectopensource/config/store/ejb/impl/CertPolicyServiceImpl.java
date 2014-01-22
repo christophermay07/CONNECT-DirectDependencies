@@ -390,6 +390,11 @@ public class CertPolicyServiceImpl implements CertPolicyService {
 	public void associatePolicyGroupToDomain(Domain domain, CertPolicyGroup policyGroup)
 			throws ConfigurationStoreException {
 
+        // make sure the domain exists
+        if (domain == null) {
+            throw new ConfigurationStoreException("Domain does not exist");
+        }
+
 		try {
             final CertPolicyGroupDomainReltn policyGroupDomainAssoc = new CertPolicyGroupDomainReltn();
             
@@ -406,6 +411,11 @@ public class CertPolicyServiceImpl implements CertPolicyService {
 	public void disassociatePolicyGroupFromDomain(Domain domain,
 			CertPolicyGroup policyGroup) throws ConfigurationStoreException {
         
+        // make sure the domain exists
+        if (domain == null) {
+            throw new ConfigurationStoreException("Domain does not exist");
+        }
+
 		try {
             final Query select = entityManager.createQuery("SELECT cpr from CertPolicyGroupDomainReltn cpr where cpr.domain  = ?1 " +
                     " and cpr.certPolicyGroup = ?2 ");
@@ -428,6 +438,11 @@ public class CertPolicyServiceImpl implements CertPolicyService {
 	public void disassociatePolicyGroupsFromDomain(Domain domain)
 			throws ConfigurationStoreException {
 
+        // make sure the domain exists
+        if (domain == null) {
+            throw new ConfigurationStoreException("Domain does not exist");
+        }
+
         try {
             final Query delete = entityManager.createQuery("DELETE from CertPolicyGroupDomainReltn cpr where cpr.domain  = ?1");
 
@@ -442,6 +457,11 @@ public class CertPolicyServiceImpl implements CertPolicyService {
 	@Override
 	public Collection<CertPolicyGroupDomainReltn> getPolicyGroupsByDomain(Domain domain)
 			throws ConfigurationStoreException {
+
+        // make sure the domain exists
+        if (domain == null) {
+            throw new ConfigurationStoreException("Domain does not exist");
+        }
 
         Collection<CertPolicyGroupDomainReltn> retVal = null;
 
