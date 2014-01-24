@@ -141,6 +141,10 @@
                     <groupId>cglib</groupId>
                     <artifactId>cglib</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -202,6 +206,10 @@
                 <exclusion>
                     <groupId>org.hibernate</groupId>
                     <artifactId>ejb3-persistence</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>javax.activation</groupId>
