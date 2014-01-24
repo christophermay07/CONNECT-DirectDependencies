@@ -30,10 +30,10 @@
     </developers>
 
     <licenses>
-       <license>
-          <name>New BSD License</name>
-          <url>http://nhindirect.org/BSDLicense</url>
-       </license>
+        <license>
+            <name>New BSD License</name>
+            <url>http://nhindirect.org/BSDLicense</url>
+        </license>
     </licenses>
 
     <issueManagement>
@@ -114,6 +114,16 @@
             <version>2.0.3</version>
             <type>jar</type>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>bouncycastle</groupId>
+                    <artifactId>bcmail-jdk15</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
@@ -134,12 +144,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-          <dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
             <version>2.9.2</version>
-          </dependency>
-          <dependency>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
             <version>2.9.2</version>
@@ -149,28 +159,39 @@
                     <artifactId>spring-tx</artifactId>
                 </exclusion>
             </exclusions>
-          </dependency>
-          <dependency>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-mina</artifactId>
             <version>2.9.2</version>
-          </dependency>
-          <dependency>
+        </dependency>
+        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>2.0</version>
-          </dependency>
-          <dependency>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test</artifactId>
             <version>2.9.2</version>
             <scope>test</scope>
-         </dependency>
-         <dependency>
-            <groupId>bouncycastle</groupId>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15</artifactId>
+            <version>1.45</version>
+        </dependency>
+        <dependency>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcmail-jdk15</artifactId>
             <version>140</version>
-         </dependency>
+            <exclusions>
+                <exclusion>
+                    <groupId>bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit3</artifactId>
@@ -178,10 +199,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-all</artifactId>
-          <version>1.8.5</version>
-          <scope>test</scope>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -272,7 +293,7 @@
                     </execution>
                 </executions>
             </plugin-->
-            <!--  for releases only
+    <!--  for releases only
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -307,7 +328,7 @@
                </executions>
             </plugin>
             -->
-        <!--/plugins>
+    <!--/plugins>
     </build>
     <reporting>
         <plugins>
