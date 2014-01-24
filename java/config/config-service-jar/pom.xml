@@ -172,12 +172,6 @@
             <version>140</version>
          </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit3</artifactId>
             <version>2.5.1</version>
@@ -226,7 +220,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
+    <!--build>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -277,7 +271,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
             <!--  for releases only
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -313,7 +307,7 @@
                </executions>
             </plugin>
             -->
-        </plugins>
+        <!--/plugins>
     </build>
     <reporting>
         <plugins>
@@ -356,7 +350,6 @@
                 <artifactId>maven-changelog-plugin</artifactId>
                 <configuration>
                     <dates>
-                        <!-- Insert the date of the most recent release -->
                         <date>2007-01-01</date>
                     </dates>
                     <outputEncoding>UTF-8</outputEncoding>
@@ -418,6 +411,5 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
             <uniqueVersion>false</uniqueVersion>
          </repository>
-    </distributionManagement>
-
+    </distributionManagement-->
 </project>
